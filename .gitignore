@@ -1,0 +1,5 @@
+# API key — never commit
+sync.bat
+
+# Claude Code session data
+.claude/

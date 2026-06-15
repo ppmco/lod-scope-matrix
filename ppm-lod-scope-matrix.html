@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPM — LOD Scope Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+<style>
+:root {
+  /* PPM Brand */
+  --ppm-navy:       #0d1f2f;
+  --ppm-dark-blue:  #06487a;
+  --ppm-blue:       #0072c6;
+  --ppm-light-blue: #53aaeb;
+  --ppm-dark-gray:  #333333;
+  --ppm-mid-gray:   #373d40;
+  --ppm-light-gray: #e9e9e9;
+
+  /* Backgrounds */
+  --color-background-primary:   #ffffff;
+  --color-background-secondary: #e9e9e9;
+  --color-background-tertiary:  #d4d4d4;
+  --color-background-success:   #dceef9;  /* light PPM Blue tint — LOD 250 */
+  --color-background-info:      #d4e4f0;  /* light Dark Blue tint — LOD 300 */
+
+  /* Text */
+  --color-text-primary:   #333333;  /* Dark Gray */
+  --color-text-secondary: #373d40;  /* Mid Gray */
+  --color-text-tertiary:  #6b7880;
+  --color-text-success:   #0072c6;  /* PPM Blue — LOD 250 */
+  --color-text-info:      #06487a;  /* Dark Blue — LOD 300 */
+
+  /* Borders */
+  --color-border-tertiary:  rgba(0,0,0,0.09);
+  --color-border-secondary: rgba(0,0,0,0.16);
+  --color-border-primary:   rgba(0,0,0,0.28);
+  --color-border-success:   #0072c6;  /* PPM Blue */
+  --color-border-info:      #06487a;  /* Dark Blue */
+
+  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'DM Mono', 'Fira Code', 'Consolas', monospace;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  background: #e9e9e9;
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  -webkit-font-smoothing: antialiased;
+}
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: var(--color-background-primary);
+  border-radius: var(--border-radius-xl);
+  padding: 2rem 2.25rem 2.5rem;
+  border: 0.5px solid var(--color-border-tertiary);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* Tier cards */
+.tier-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+.tier-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+.tier-card.featured { border: 2px solid var(--color-border-success); }
+.tc-img { background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); position: relative; }
+.tc-body { padding: 0.9rem 1.1rem; }
+.tc-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
+.tc-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 7px; }
+.tc-desc { font-size: 11px; color: var(--color-text-secondary); line-height: 1.6; }
+.l200 { color: var(--color-text-secondary); }
+.l250 { color: var(--color-text-success); }
+.l300 { color: var(--color-text-info); }
+.ppm-badge { display: inline-block; font-size: 9px; background: #0072c6; color: #ffffff; padding: 2px 7px; border-radius: var(--border-radius-md); margin-left: 6px; vertical-align: middle; font-weight: 500; }
+
+/* Filter bar */
+.fbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.fbtn { font-size: 12px; font-family: var(--font-sans); padding: 5px 13px; cursor: pointer; border-radius: var(--border-radius-md); transition: all 0.15s; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); white-space: nowrap; }
+.fbtn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+.fbtn.fa-all { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
+.fbtn.fa-200 { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
+.fbtn.fa-250 { background: #0072c6; color: #ffffff; border-color: #0072c6; font-weight: 500; }
+.fbtn.fa-300 { background: #06487a; color: #ffffff; border-color: #06487a; font-weight: 500; }
+
+/* Table */
+.tbl-wrap { overflow-x: auto; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); }
+.stbl { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+.stbl col.col-el { width: 20%; }
+.stbl col.col-lod { width: 26.7%; }
+.stbl th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); border-bottom: 1px solid var(--color-border-secondary); padding: 9px 11px; text-align: left; vertical-align: bottom; line-height: 1.4; }
+.stbl td { padding: 9px 11px; text-align: left; vertical-align: top; border-bottom: 0.5px solid var(--color-border-tertiary); line-height: 1.55; word-wrap: break-word; overflow-wrap: break-word; }
+.stbl tbody tr:last-child td { border-bottom: none; }
+.th-250 { box-shadow: inset 2px 0 0 #0072c6, inset -2px 0 0 #0072c6, inset 0 2px 0 #0072c6; }
+.th-250 .lbl { color: #0072c6; }
+.th-300 .lbl { color: #06487a; }
+.c250 { box-shadow: inset 2px 0 0 #0072c6, inset -2px 0 0 #0072c6; }
+.stbl tbody tr:last-child .c250 { box-shadow: inset 2px 0 0 #0072c6, inset -2px 0 0 #0072c6, inset 0 -2px 0 #0072c6; }
+
+/* Cell types */
+.cel { color: var(--color-text-primary); font-weight: 500; font-size: 12px; }
+.c200, .c250, .c300 { color: var(--color-text-secondary); transition: opacity 0.2s, background 0.2s; }
+.cexc { color: var(--ppm-blue); font-style: normal; font-size: 11px; font-weight: 500; }
+.cath td { background: #373d40; font-size: 10px; font-weight: 500; color: #ffffff; text-transform: uppercase; letter-spacing: 0.09em; padding: 5px 11px; }
+
+/* Column background tints
+   200  = pale sky blue  (#53aaeb @ 20%)  → #dceefb
+   300  = steel gray-blue (#06487a @ 25%) → #c0d1de  (clearly more muted/gray)
+   250u = vivid cobalt   (#0072c6 @ 35%) → #a6ceeb  (clearly darker than 200, bluer than 300)
+   exc  = light red      (#d22 @ 15%)    → #f8dede
+*/
+.c200                { background: rgba(83,170,235,0.20); }
+.c200:has(.cexc)     { background: rgba(210,40,40,0.15); }
+.c300                { background: rgba(6,72,122,0.25); }
+.c250-200            { background: rgba(83,170,235,0.20); }
+.c250-300            { background: rgba(6,72,122,0.25); }
+.c250-unique         { background: rgba(0,114,198,0.35); }
+
+/* Filter states — more saturated so active highlight is clearly visible above base */
+.ft200 .c250, .ft200 .c300 { opacity: 0.2; }
+.ft200 .c200 { background: rgba(83,170,235,0.45); }
+.ft250 .c200, .ft250 .c300 { opacity: 0.2; }
+.ft250 .c250 { background: rgba(0,114,198,0.52); }
+.ft300 .c200, .ft300 .c250 { opacity: 0.2; }
+.ft300 .c300 { background: rgba(6,72,122,0.48); }
+
+/* Expand / chevron */
+.cel-inner { display: flex; align-items: center; gap: 7px; }
+.caret { flex-shrink: 0; width: 16px; height: 16px; border-radius: 4px; background: var(--color-background-secondary); display: flex; align-items: center; justify-content: center; transition: background 0.15s, transform 0.2s; }
+.caret i { font-size: 10px; color: var(--color-text-tertiary); line-height: 1; transition: transform 0.2s; display: block; }
+.erow > .cel { cursor: pointer; user-select: none; }
+.erow > .cel:hover .caret { background: var(--color-background-tertiary); }
+.erow > .cel:hover .caret i { color: var(--color-text-secondary); }
+.caret.open { background: #0072c6; }
+.caret.open i { color: #ffffff; transform: rotate(90deg); }
+
+/* Image expand row */
+.irow { display: none; }
+.irow.open { display: table-row; }
+.irow td { padding: 0; border-bottom: 0.5px solid var(--color-border-secondary) !important; }
+.iexpand { padding: 12px 11px 16px; background: var(--color-background-secondary); }
+.iimg-wrap { position: relative; border-radius: var(--border-radius-md); overflow: hidden; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); }
+.iph { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 32px 20px; border: 1px dashed var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); }
+.iph i { font-size: 22px; color: var(--color-text-tertiary); }
+.iph-fn { font-size: 10px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
+.iph-hint { font-size: 10px; color: var(--color-text-tertiary); }
+.ireal { width: 100%; max-height: 340px; object-fit: contain; display: block; }
+.icap { font-size: 10px; color: var(--color-text-tertiary); margin-top: 8px; text-align: center; font-style: italic; }
+
+/* Tier images */
+.tiph { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; aspect-ratio: 16/9; width: 100%; }
+.tiph i { font-size: 20px; color: var(--color-text-tertiary); }
+.tiph-fn { font-size: 10px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
+.tireal { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: none; }
+.tc-img { cursor: pointer; }
+.tc-img-hover { position: relative; }
+.tc-img-hover::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background 0.18s; }
+.tc-img-hover:hover::after { background: rgba(0,0,0,0.12); }
+.tc-img-zoom { position: absolute; top: 8px; right: 8px; z-index: 2; background: rgba(0,0,0,0.45); border-radius: 6px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.18s; pointer-events: none; }
+.tc-img-zoom i { font-size: 13px; color: #fff; }
+.tc-img-hover:hover .tc-img-zoom { opacity: 1; }
+
+/* Lightbox */
+.lbx { position: fixed; inset: 0; background: rgba(10,18,28,0.95); z-index: 2000; display: none; align-items: center; justify-content: center; }
+.lbx.open { display: flex; }
+.lbx-close { position: fixed; top: 18px; right: 20px; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s; }
+.lbx-close:hover { background: rgba(255,255,255,0.2); }
+.lbx-close i { font-size: 15px; }
+.lbx-inner { display: flex; flex-direction: column; align-items: stretch; gap: 14px; width: min(92vw, 1100px); }
+.lbx-stack { position: relative; width: 100%; border-radius: 10px; overflow: hidden; background: #000; }
+.lbx-cimg { width: 100%; max-height: 72vh; object-fit: contain; display: block; }
+.lbx-cimg:not(:first-child) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.lbx-ctrl { display: flex; flex-direction: column; gap: 7px; }
+.lbx-stops { display: grid; grid-template-columns: 1fr 1fr 1fr; font-size: 10px; font-weight: 500; letter-spacing: 0.05em; color: rgba(255,255,255,0.28); user-select: none; }
+.lbx-stops span { cursor: pointer; transition: color 0.18s; padding: 2px 0; }
+.lbx-stops span:nth-child(2) { text-align: center; }
+.lbx-stops span:nth-child(3) { text-align: right; }
+.lbx-stops span.active { color: #fff; }
+.lbx-range { width: 100%; -webkit-appearance: none; appearance: none; height: 3px; border-radius: 3px; background: rgba(255,255,255,0.15); outline: none; cursor: pointer; }
+.lbx-range::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,0.5); transition: transform 0.1s; }
+.lbx-range::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.lbx-range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #fff; cursor: pointer; border: none; box-shadow: 0 1px 6px rgba(0,0,0,0.5); }
+.lbx-hint { font-size: 10px; color: rgba(255,255,255,0.25); text-align: center; }
+
+/* Print */
+@media print {
+  body { background: white; padding: 0; }
+  .page { box-shadow: none; border: none; padding: 1rem; max-width: 100%; }
+  .fbar { display: none; }
+  .c200, .c250, .c300 { opacity: 1 !important; background: transparent !important; }
+  .irow { display: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<p style="font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.09em;margin-bottom:.6rem">LOD Descriptions</p>
+<div class="tier-grid">
+  <div class="tier-card">
+    <div class="tc-img tc-img-hover" onclick="lbxOpen(0)">
+      <span class="tc-img-zoom"><i class="ti ti-arrows-maximize"></i></span>
+      <div class="tiph" id="tiph-200"><i class="ti ti-photo"></i><span class="tiph-fn">images/lod-200.png</span></div>
+      <img class="tireal" id="timg-200" src="images/lod-200.png" alt="LOD 200 — Generic">
+    </div>
+    <div class="tc-body">
+      <p class="tc-label l200">LOD 200</p>
+      <p class="tc-name">Generic</p>
+      <p class="tc-desc">A simplified 3D model with verified overall geometry based on field-documented conditions, including size, location, and orientation. Elements are modeled as generic objects with minimal or omitted materials and detailing.</p>
+    </div>
+  </div>
+  <div class="tier-card featured">
+    <div class="tc-img tc-img-hover" onclick="lbxOpen(1)">
+      <span class="tc-img-zoom"><i class="ti ti-arrows-maximize"></i></span>
+      <div class="tiph" id="tiph-250"><i class="ti ti-photo"></i><span class="tiph-fn">images/lod-250.png</span></div>
+      <img class="tireal" id="timg-250" src="images/lod-250.png" alt="LOD 250 — PPM Standard">
+    </div>
+    <div class="tc-body">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
+        <p class="tc-label l250" style="margin:0">LOD 250</p>
+        <span class="ppm-badge">PPM Standard</span>
+      </div>
+      <p class="tc-name">PPM Standard</p>
+      <p class="tc-desc">Our standard as-built BIM deliverable. It includes verified overall geometry with a consistent mix of LOD 200 generic elements and LOD 300 specific elements, keeping the model efficient while still highly usable.</p>
+    </div>
+  </div>
+  <div class="tier-card">
+    <div class="tc-img tc-img-hover" onclick="lbxOpen(2)">
+      <span class="tc-img-zoom"><i class="ti ti-arrows-maximize"></i></span>
+      <div class="tiph" id="tiph-300"><i class="ti ti-photo"></i><span class="tiph-fn">images/lod-300.png</span></div>
+      <img class="tireal" id="timg-300" src="images/lod-300.png" alt="LOD 300 — Specific">
+    </div>
+    <div class="tc-body">
+      <p class="tc-label l300">LOD 300</p>
+      <p class="tc-name">Specific</p>
+      <p class="tc-desc">A higher-detail BIM model where elements are modeled as specific components. Elements include accurate size, shape, and placement, with added detail such as materials, profiles, and major architectural features when they are visible and verifiable.
+*This does not include fabrication-level detail or concealed construction, such as finished wall, floor, ceiling, or roof assemblies.*</p>
+    </div>
+  </div>
+</div>
+
+<div style="border-top:1px solid var(--color-border-tertiary);margin:2rem 0 1.5rem"></div>
+<p style="font-size:10px;font-weight:500;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.09em;margin-bottom:1rem">LOD Matrix</p>
+
+<div class="fbar">
+  <span style="font-size:11px;color:var(--color-text-tertiary)">Highlight tier:</span>
+  <button class="fbtn fa-all" onclick="sf('all',this)">All tiers</button>
+  <button class="fbtn" onclick="sf('200',this)">LOD 200</button>
+  <button class="fbtn" onclick="sf('250',this)">LOD 250 — PPM Standard</button>
+  <button class="fbtn" onclick="sf('300',this)">LOD 300</button>
+  <span style="font-size:11px;color:var(--color-text-tertiary);margin-left:8px">
+    <i class="ti ti-chevron-right" style="font-size:11px;vertical-align:-1px"></i> Click any element to view LOD comparison
+  </span>
+</div>
+
+<div class="tbl-wrap">
+<table class="stbl" id="tbl">
+<colgroup>
+  <col class="col-el">
+  <col class="col-lod">
+  <col class="col-lod">
+  <col class="col-lod">
+</colgroup>
+<thead>
+<tr>
+  <th>Element</th>
+  <th class="th-200">LOD 200</th>
+  <th class="th-250"><span class="lbl">LOD 250<span class="ppm-badge">PPM Standard</span></span></th>
+  <th class="th-300"><span class="lbl">LOD 300</span></th>
+</tr>
+</thead>
+<tbody>
+
+<tr class="cath"><td colspan="4">Architectural</td></tr>
+<tr class="erow"><td class="cel" data-slug="walls"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Walls</div></td><td class="c200">Generic 3D wall elements; approximate thickness; no material applied.</td><td class="c250 c250-200">Generic 3D wall elements; approximate thickness; exterior face material; openings &gt; 6" represented.</td><td class="c300">Specific 3D wall elements with verified thickness and alignment, materials applied to visible faces, and all openings larger than 2" represented.</td></tr>
+<tr class="erow"><td class="cel" data-slug="floors"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Floors</div></td><td class="c200">Generic 3D floor elements; generic material and thickness.</td><td class="c250 c250-200">Generic 3D floor elements; generic material and thickness.</td><td class="c300">Specific 3D floor elements with verified overall thickness, finish materials applied to visible surfaces, and structural framing added where accessible in the point cloud or documentation.</td></tr>
+<tr class="erow"><td class="cel" data-slug="ceilings"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Ceilings</div></td><td class="c200">Generic 3D ceiling elements; soffits and major features shown.</td><td class="c250 c250-200">Generic 3D ceiling elements; soffits and major features shown.</td><td class="c300">Specific 3D ceilings; verified thickness/height variations; finishes and visible crown/trim applied.</td></tr>
+<tr class="erow"><td class="cel" data-slug="roofs"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Roofs</div></td><td class="c200">Generic 3D roofs; no material.</td><td class="c250 c250-unique">Generic 3D roofs; exterior material; roof openings &gt;= 6" represented.</td><td class="c300">Specific 3D roof elements with verified slopes, overhangs, ridge/valley heights, and slope breaks, with roof materials applied to visible surfaces.</td></tr>
+<tr class="erow"><td class="cel" data-slug="doors"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Doors</div></td><td class="c200">Generic 3D door types; verified overall size; no detail.</td><td class="c250 c250-unique">Exterior Doors: Specific 3D elements with verified size, placement, and operability; casing and visible framing detailed. Interior Doors: Generic 3D door types; verified size and operability; no casing or details.</td><td class="c300">Specific 3D elements with verified size, placement, and operability; casing, hardware, and visible framing detailed. (Interior &amp; Exterior)</td></tr>
+<tr class="erow"><td class="cel" data-slug="windows"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Windows / Openings</div></td><td class="c200">Generic 3D elements; verified overall size and location; no detail.</td><td class="c250 c250-unique">Specific 3D window types with verified size and location. Exterior trim and details included; interior trim and detail excluded</td><td class="c300">Specific 3D elements; verified size, placement, and type. Muntins, casing, sills, and visible details on both the exterior and interior.</td></tr>
+<tr class="erow"><td class="cel" data-slug="stairs"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Stairs / Elevators / Shafts</div></td><td class="c200">Generic 3D elements with minimal detail.</td><td class="c250 c250-unique">Generic 3D stairs/shafts; basic railing detail approximated to conditions.</td><td class="c300">Specific 3D stairs/shafts; verified risers, treads, landings, elevator openings, and railing detail.</td></tr>
+
+<tr class="cath"><td colspan="4">Interior elements</td></tr>
+<tr class="erow"><td class="cel" data-slug="casework"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Built-in Cabinetry / Counters</div></td><td class="c200">Generic 3D elements; approximate size; verified location.</td><td class="c250 c250-200">Generic 3D elements; approximate size; verified location.</td><td class="c300">Specific/custom 3D elements; verified size/placement; doors, drawers, hardware detailed.</td></tr>
+<tr class="erow"><td class="cel" data-slug="appliances"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Major Appliances</div></td><td class="c200">Generic 3D elements; approximate type and size; verified location.</td><td class="c250 c250-unique">Generic 3D elements; approximate type and size; verified location.</td><td class="c300">Specific 3D elements; verified type, size, placement, and configuration.</td></tr>
+<tr class="erow"><td class="cel" data-slug="plumbing"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Plumbing Fixtures</div></td><td class="c200">Generic 3D elements; approximate type and size; verified location.</td><td class="c250 c250-unique">Generic 3D elements; approximate type and size; verified location.</td><td class="c300">Specific 3D elements; verified size, placement, and configuration.</td></tr>
+<tr class="erow"><td class="cel" data-slug="wall-elements"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Attached wall elements (shelves, mirrors)</div></td><td class="c200"><span class="cexc">Excluded from LOD 200.</span></td><td class="c250 c250-unique">Modeled if fixed; represented with generic 3D components at approximate size and location.</td><td class="c300">Specific/custom 3D components; verified size, placement, and detailing.</td></tr>
+
+<tr class="cath"><td colspan="4">Exterior elements</td></tr>
+<tr class="erow"><td class="cel" data-slug="facade"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Building Facade</div></td><td class="c200">Exterior walls/roofs surfaced with generic materials; minimal detail.</td><td class="c250 c250-unique">Materials applied to walls/roofs; Generic trim/features included.</td><td class="c300">Materials applied to all visible faces; detailed trim, soffits, sweeps, and architectural features.</td></tr>
+<tr class="erow"><td class="cel" data-slug="deck"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Attached Decks / Balconies</div></td><td class="c200">Generic 3D, basic shapes only - no railing/post detail</td><td class="c250 c250-unique">Generic 3D elements; approximate size/configuration with basic post and railing profiles</td><td class="c300">Specific 3D elements; verified size/configuration; posts, railings, decking, and trim detailed.</td></tr>
+
+<tr class="cath"><td colspan="4">Structural</td></tr>
+<tr class="erow"><td class="cel" data-slug="columns"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Columns / Posts</div></td><td class="c200">Generic 3D elements and shapes; approximate size; verified location.</td><td class="c250 c250-unique">Generic 3D elements and shapes; approximate size; verified location; segments included if &gt; 3".</td><td class="c300">Verified shape, size, and height; all segments and trim &gt;0.5" modeled.</td></tr>
+<tr class="erow"><td class="cel" data-slug="beams"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Structural Elements (beams, exposed structure)</div></td><td class="c200">Generic 3D elements and shapes; approximate size; verified location.</td><td class="c250 c250-200">Generic 3D elements and shapes; approximate size; verified location; no specific profiles, trim details, or materials are represented.</td><td class="c300">Specific 3D elements; verified spans, sizes, spacing, and profiles.</td></tr>
+<tr class="erow"><td class="cel" data-slug="framing"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Framing (joists, rafters, trusses)</div></td><td class="c200"><span class="cexc">Excluded from LOD 200.</span></td><td class="c250 c250-unique">Generic 3D elements; approximate size and location; no specific profiles, trim details, or materials are represented.</td><td class="c300">Specific 3D framing members; verified spans, sizes, spacing, and profiles.</td></tr>
+<tr class="erow"><td class="cel" data-slug="foundation"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Foundation Walls</div></td><td class="c200"><span class="cexc">Excluded from LOD 200.</span></td><td class="c250 c250-unique">Generic 3D wall elements; approximate thickness and location.</td><td class="c300">Specific 3D elements; approximate thickness and location.</td></tr>
+<tr class="erow"><td class="cel" data-slug="footings"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Footings / Piers / Posts</div></td><td class="c200"><span class="cexc">Excluded from LOD 200.</span></td><td class="c250 c250-unique">Generic 3D elements; approximate size and location.</td><td class="c300">Specific 3D elements; verified profiles and dimensions.</td></tr>
+
+<tr class="cath"><td colspan="4">Roof elements</td></tr>
+<tr class="erow"><td class="cel" data-slug="parapets"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Parapets / Chimneys</div></td><td class="c200">Generic 3D wall elements; approximate thickness; no material applied; </td><td class="c250 c250-unique">Generic 3D wall elements; approximate thickness; exterior face material; openings &gt; 6" represented.</td><td class="c300">Specific 3D wall elements with verified thickness and alignment, materials applied to visible faces, and all openings &gt; 2".</td></tr>
+<tr class="erow"><td class="cel" data-slug="skylights"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Skylights</div></td><td class="c200">Generic 3D elements; verified overall size and location.</td><td class="c250 c250-unique">Specific 3D skylight types with verified size and location. </td><td class="c300">Specific 3D elements; verified size, placement, and type. </td></tr>
+<tr class="erow"><td class="cel" data-slug="roof-equipment"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Fixed Roof Equipment</div></td><td class="c200"><span class="cexc">Excluded from LOD 200.</span></td><td class="c250 c250-200">Generic 3D elements; approximate type and size; verified location.</td><td class="c300">Specific 3D elements; verified dimensions/placement; connections shown if visible.</td></tr>
+<tr class="erow"><td class="cel" data-slug="drains"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Drains / Vents</div></td><td class="c200"><span class="cexc">Excluded from LOD 200.</span></td><td class="c250 c250-unique">Generic 3D elements; approximate size/location of all drains, downspouts, and vents ≥6”.</td><td class="c300">Specific 3D elements; verified location and size of all drains, downspouts, and vents ≥3".</td></tr>
+
+<tr class="cath"><td colspan="4">MEP &amp; equipment</td></tr>
+<tr class="erow"><td class="cel" data-slug="mep"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Large MEP Equipment (furnace, water heater, solar components, etc.)</div></td><td class="c200">Generic 3D elements; approximate type and size; verified location.</td><td class="c250 c250-200">Generic 3D elements; approximate type and size; verified location.</td><td class="c300">Specific 3D elements; verified dimensions/placement.</td></tr>
+<tr class="erow"><td class="cel" data-slug="utility-panels"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Utility Panels &amp; Meters</div></td><td class="c200">Generic 3D elements; approximate type and size; verified location.</td><td class="c250 c250-200">Generic 3D elements; approximate type and size; verified location.</td><td class="c300">Specific 3D elements; verified dimensions/placement; </td></tr>
+<tr class="erow"><td class="cel" data-slug="outlets"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Outlets / Switches / Jacks</div></td><td class="c200">Generic 2D symbols at approximate locations.</td><td class="c250 c250-unique">Generic 3D elements; generic size and type; verified location, and mounting height.</td><td class="c300">Modeled as specific 3D elements; verified size, height, grouping, and orientation.</td></tr>
+<tr class="erow"><td class="cel" data-slug="controls"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Controls (HVAC, security)</div></td><td class="c200">Generic 2D symbols at approximate locations.</td><td class="c250 c250-unique">Generic 3D elements; generic size and type; verified location, and mounting height.</td><td class="c300">Modeled as specific 3D elements; verified placement, size, and height.</td></tr>
+<tr class="erow"><td class="cel" data-slug="fixtures"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Ceiling Fixtures (lights, vents, sprinklers, etc)</div></td><td class="c200"><span class="cexc">Excluded from LOD 200.</span></td><td class="c250 c250-unique">Generic 3D elements; generic size and type; verified location.</td><td class="c300">Specific 3D fixtures; verified location/type/size/configuration.</td></tr>
+<tr class="erow"><td class="cel" data-slug="piping"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Piping / Ducting</div></td><td class="c200"><span class="cexc">Excluded from LOD 200.</span></td><td class="c250 c250-unique">Generic 3D elements; approximate shape, size, and location.</td><td class="c300">Specific 3D elements; location/shape/size and fittings. </td></tr>
+
+<tr class="cath"><td colspan="4">Site</td></tr>
+<tr class="erow"><td class="cel" data-slug="footprint"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Building/Structure footprint</div></td><td class="c200">Generic 2D linework at approximate locations.</td><td class="c250 c250-unique">Generic 2D linework at approximate locations.</td><td class="c300">3D massing; verified dimensions; approximate height. </td></tr>
+<tr class="erow"><td class="cel" data-slug="hardscape"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Major Hardscape/Parking</div></td><td class="c200">Generic 2D linework at approximate locations.</td><td class="c250 c250-unique">Generic 2D linework at approximate locations.</td><td class="c300">Specific 3D elements; materials applied and labeled.</td></tr>
+<tr class="erow"><td class="cel" data-slug="utilities"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Utilities (Gas/Elec/Water Meters)</div></td><td class="c200">Generic 2D symbols at approximate locations.</td><td class="c250 c250-unique">Generic 2D linework at approximate locations.</td><td class="c300">Specific 3D elements; verified type/size; </td></tr>
+
+</tbody>
+</table>
+</div>
+
+</div>
+
+<!-- Lightbox -->
+<div class="lbx" id="lbx" onclick="lbxBgClick(event)">
+  <button class="lbx-close" onclick="lbxClose()"><i class="ti ti-x"></i></button>
+  <div class="lbx-inner">
+    <div class="lbx-stack">
+      <img class="lbx-cimg" id="lbx-c200" src="images/lod-200.png" alt="LOD 200">
+      <img class="lbx-cimg" id="lbx-c250" src="images/lod-250.png" alt="LOD 250" style="opacity:0">
+      <img class="lbx-cimg" id="lbx-c300" src="images/lod-300.png" alt="LOD 300" style="opacity:0">
+    </div>
+    <div class="lbx-ctrl">
+      <div class="lbx-stops">
+        <span class="active" onclick="lbxSnap(0)">LOD 200 — Generic</span>
+        <span onclick="lbxSnap(100)">LOD 250 — PPM Standard</span>
+        <span onclick="lbxSnap(200)">LOD 300 — Specific</span>
+      </div>
+      <input class="lbx-range" type="range" id="lbx-slider" min="0" max="200" value="0" step="1">
+      <p class="lbx-hint">Drag to blend between tiers &nbsp;·&nbsp; Click a label to jump &nbsp;·&nbsp; ← → keys &nbsp;·&nbsp; Esc to close</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Wire up tier header images
+['200','250','300'].forEach(function(lod) {
+  var img = document.getElementById('timg-' + lod);
+  var ph  = document.getElementById('tiph-' + lod);
+  if (!img) return;
+  function show() { ph.style.display = 'none'; img.style.display = 'block'; }
+  img.addEventListener('load',  show);
+  img.addEventListener('error', function() { img.style.display = 'none'; });
+  if (img.complete && img.naturalWidth > 0) show();
+});
+
+// Build image expand rows from data-slug attributes
+document.addEventListener('DOMContentLoaded', function() {
+  var labels = {
+    'walls':'Walls','floors':'Floors','ceilings':'Ceilings','roofs':'Roofs','doors':'Doors','windows':'Windows / Openings','stairs':'Stairs / Elevators / Shafts',
+    'casework':'Built-in Cabinetry / Counters','appliances':'Major Appliances','plumbing':'Plumbing Fixtures','wall-elements':'Attached wall elements (shelves, mirrors)',
+    'facade':'Building Facade','deck':'Attached Decks / Balconies',
+    'columns':'Columns / Posts','beams':'Structural Elements (beams, exposed structure)','framing':'Framing (joists, rafters, trusses)','foundation':'Foundation Walls','footings':'Footings / Piers / Posts',
+    'parapets':'Parapets / Chimneys','skylights':'Skylights','roof-equipment':'Fixed Roof Equipment','drains':'Drains / Vents',
+    'mep':'Large MEP Equipment (furnace, water heater, solar components, etc.)','utility-panels':'Utility Panels & Meters','outlets':'Outlets / Switches / Jacks','controls':'Controls (HVAC, security)','fixtures':'Ceiling Fixtures (lights, vents, sprinklers, etc)','piping':'Piping / Ducting',
+    'footprint':'Building/Structure footprint','hardscape':'Major Hardscape/Parking','utilities':'Utilities (Gas/Elec/Water Meters)'
+  };
+
+  document.querySelectorAll('[data-slug]').forEach(function(cell) {
+    var slug = cell.getAttribute('data-slug');
+    var erow = cell.closest('tr');
+
+    // Wire up click
+    cell.addEventListener('click', function() { tog(slug); });
+
+    // Build image row
+    var irow = document.createElement('tr');
+    irow.className = 'irow';
+    irow.id = 'irow-' + slug;
+
+    var emptyTd = document.createElement('td');
+    emptyTd.style.cssText = 'padding:0;border-bottom:0.5px solid var(--color-border-secondary);background:var(--color-background-primary)';
+    irow.appendChild(emptyTd);
+
+    var td = document.createElement('td');
+    td.setAttribute('colspan', '3');
+
+    var iexpand = document.createElement('div');
+    iexpand.className = 'iexpand';
+
+    var iwrap = document.createElement('div');
+    iwrap.className = 'iimg-wrap';
+
+    // Placeholder
+    var iph = document.createElement('div');
+    iph.className = 'iph';
+    iph.id = 'ph-' + slug;
+    iph.innerHTML = '<i class="ti ti-photo"></i><span class="iph-fn">images/' + slug + '.png</span><span class="iph-hint">3-panel LOD comparison · landscape · 1350&times;600px min</span>';
+
+    // Image
+    var img = document.createElement('img');
+    img.className = 'ireal';
+    img.src = 'images/' + slug + '.png';
+    img.alt = (labels[slug] || slug) + ' — LOD 200 / 250 / 300 comparison';
+    img.style.display = 'none';
+    img.addEventListener('load', function() {
+      iph.style.display = 'none';
+      img.style.display = 'block';
+    });
+    img.addEventListener('error', function() {
+      img.style.display = 'none';
+    });
+
+    var icap = document.createElement('p');
+    icap.className = 'icap';
+    icap.textContent = (labels[slug] || slug) + ' — LOD 200 · LOD 250 · LOD 300';
+
+    iwrap.appendChild(iph);
+    iwrap.appendChild(img);
+    iexpand.appendChild(iwrap);
+    iexpand.appendChild(icap);
+    td.appendChild(iexpand);
+    irow.appendChild(td);
+
+    erow.insertAdjacentElement('afterend', irow);
+  });
+});
+
+function tog(slug) {
+  var irow = document.getElementById('irow-' + slug);
+  var carets = document.querySelectorAll('.caret');
+  var isOpen = irow.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.irow.open').forEach(function(r) { r.classList.remove('open'); });
+  carets.forEach(function(c) { c.classList.remove('open'); });
+
+  // Open this one if it was closed
+  if (!isOpen) {
+    irow.classList.add('open');
+    // Find and open matching caret
+    var cell = document.querySelector('[data-slug="' + slug + '"]');
+    if (cell) cell.querySelector('.caret').classList.add('open');
+    setTimeout(function() {
+      irow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 80);
+  }
+}
+
+// Lightbox
+function lbxOpen(i) {
+  lbxSnap(i * 100);
+  document.getElementById('lbx').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function lbxClose() {
+  document.getElementById('lbx').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lbxBgClick(e) { if (e.target === document.getElementById('lbx')) lbxClose(); }
+function lbxSnap(v) {
+  document.getElementById('lbx-slider').value = v;
+  lbxUpdate();
+}
+function lbxUpdate() {
+  var v = parseInt(document.getElementById('lbx-slider').value);
+  var o200 = v <= 100 ? (100 - v) / 100 : 0;
+  var o250 = v <= 100 ? v / 100 : (200 - v) / 100;
+  var o300 = v <= 100 ? 0 : (v - 100) / 100;
+  document.getElementById('lbx-c200').style.opacity = o200;
+  document.getElementById('lbx-c250').style.opacity = o250;
+  document.getElementById('lbx-c300').style.opacity = o300;
+  var active = v < 50 ? 0 : v <= 150 ? 1 : 2;
+  document.querySelectorAll('.lbx-stops span').forEach(function(s, i) {
+    s.classList.toggle('active', i === active);
+  });
+}
+document.getElementById('lbx-slider').addEventListener('input', lbxUpdate);
+document.getElementById('lbx-slider').addEventListener('change', function() {
+  var v = parseInt(this.value);
+  var nearest = [0, 100, 200].reduce(function(a, b) {
+    return Math.abs(b - v) < Math.abs(a - v) ? b : a;
+  });
+  lbxSnap(nearest);
+});
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('lbx').classList.contains('open')) return;
+  var v = parseInt(document.getElementById('lbx-slider').value);
+  if (e.key === 'Escape')     { lbxClose(); return; }
+  if (e.key === 'ArrowLeft')  lbxSnap(v <= 100 ? 0 : 100);
+  if (e.key === 'ArrowRight') lbxSnap(v < 100 ? 100 : 200);
+});
+
+function sf(tier, btn) {
+  document.querySelectorAll('.fbtn').forEach(function(b) { b.className = 'fbtn'; });
+  btn.classList.add('fa-' + tier);
+  document.getElementById('tbl').className = 'stbl' + (tier !== 'all' ? ' ft' + tier : '');
+}
+</script>
+</body>
+</html>
