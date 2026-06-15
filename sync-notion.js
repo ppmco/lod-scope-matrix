@@ -20,7 +20,7 @@ if (!TOKEN) {
 }
 
 const LOD_DB = '257d8301-90ff-80a3-af08-f4eb5c0617df'; // 🟦 LOD Matrix
-const HTML   = join(__dirname, 'ppm-lod-scope-matrix.html');
+const HTML   = join(__dirname, 'index.html');
 
 // ─── Slug map ─────────────────────────────────────────────────────────────────
 // Key   = exact Notion "Plan Item" title (case-sensitive)
