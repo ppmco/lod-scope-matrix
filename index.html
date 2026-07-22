@@ -304,8 +304,8 @@ body {
 
 <tr class="cath"><td colspan="4">Interior elements</td></tr>
 <tr class="erow"><td class="cel" data-slug="casework"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Built-in Cabinetry / Counters</div></td><td class="c200">Generic 3D elements; approximate size; verified location.</td><td class="c250 c250-200">Generic 3D elements; approximate size; verified location.</td><td class="c300">Specific/custom 3D elements; verified size/placement; doors, drawers, hardware detailed.</td></tr>
-<tr class="erow"><td class="cel" data-slug="appliances"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Major Appliances</div></td><td class="c200">Generic 3D elements; approximate type and size; verified location.</td><td class="c250 c250-unique">Generic 3D elements; approximate type and size; verified location.</td><td class="c300">Specific 3D elements; verified type, size, placement, and configuration.</td></tr>
-<tr class="erow"><td class="cel" data-slug="plumbing"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Plumbing Fixtures</div></td><td class="c200">Generic 3D elements; approximate type and size; verified location.</td><td class="c250 c250-unique">Generic 3D elements; approximate type and size; verified location.</td><td class="c300">Specific 3D elements; verified size, placement, and configuration.</td></tr>
+<tr class="erow"><td class="cel" data-slug="appliances"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Major Appliances</div></td><td class="c200">Generic 3D elements; approximate type and size; verified location.</td><td class="c250 c250-200">Generic 3D elements; approximate type and size; verified location.</td><td class="c300">Specific 3D elements; verified type, size, placement, and configuration.</td></tr>
+<tr class="erow"><td class="cel" data-slug="plumbing"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Plumbing Fixtures</div></td><td class="c200">Generic 3D elements; approximate type and size; verified location.</td><td class="c250 c250-200">Generic 3D elements; approximate type and size; verified location.</td><td class="c300">Specific 3D elements; verified size, placement, and configuration.</td></tr>
 <tr class="erow"><td class="cel" data-slug="wall-elements"><div class="cel-inner"><span class="caret"><i class="ti ti-chevron-right"></i></span>Attached wall elements (shelves, mirrors)</div></td><td class="c200"><span class="cexc">Excluded from LOD 200.</span></td><td class="c250 c250-unique">Modeled if fixed; represented with generic 3D components at approximate size and location.</td><td class="c300">Specific/custom 3D components; verified size, placement, and detailing.</td></tr>
 
 <tr class="cath"><td colspan="4">Exterior elements</td></tr>
@@ -375,6 +375,23 @@ body {
   img.addEventListener('load',  show);
   img.addEventListener('error', function() { img.style.display = 'none'; });
   if (img.complete && img.naturalWidth > 0) show();
+});
+
+// Auto-match the LOD 250 cell color when its definition is identical to LOD 200 or LOD 300
+document.addEventListener('DOMContentLoaded', function() {
+  function norm(td) { return td ? td.textContent.replace(/\s+/g, ' ').trim().toLowerCase() : null; }
+  document.querySelectorAll('tr.erow').forEach(function(row) {
+    var c200 = row.querySelector('td.c200');
+    var c250 = row.querySelector('td.c250');
+    var c300 = row.querySelector('td.c300');
+    if (!c250) return;
+    var t250 = norm(c250);
+    if (!t250) return;
+    var match = (t250 === norm(c200)) ? 'c250-200' : (t250 === norm(c300)) ? 'c250-300' : null;
+    if (!match) return;
+    c250.classList.remove('c250-200', 'c250-300', 'c250-unique');
+    c250.classList.add(match);
+  });
 });
 
 // Build image expand rows from data-slug attributes
