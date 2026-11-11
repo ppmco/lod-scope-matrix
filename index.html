@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PPM — LOD Scope Reference</title>
+<title>PPM LOD Scope Reference</title>
+<meta name="description" content="What each PPM LOD tier includes, element by element: LOD 200, LOD 250 (PPM Standard), and LOD 300 for Scan-to-BIM existing conditions deliverables.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.31.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <style>
+/* ───────────── Tokens ───────────── */
 :root {
-  /* PPM Brand */
+  /* PPM brand */
   --ppm-navy:       #0d1f2f;
   --ppm-dark-blue:  #06487a;
   --ppm-blue:       #0072c6;
@@ -18,264 +20,425 @@
   --ppm-mid-gray:   #373d40;
   --ppm-light-gray: #e9e9e9;
 
-  /* Backgrounds */
-  --color-background-primary:   #ffffff;
-  --color-background-secondary: #e9e9e9;
-  --color-background-tertiary:  #d4d4d4;
-  --color-background-success:   #dceef9;  /* light PPM Blue tint — LOD 250 */
-  --color-background-info:      #d4e4f0;  /* light Dark Blue tint — LOD 300 */
+  /* Roles */
+  --ink:        var(--ppm-dark-gray);
+  --ink-soft:   var(--ppm-mid-gray);
+  --muted:      #5d686f;
+  --line:       #dde2e6;
+  --line-soft:  #ebeef0;
+  --paper:      #ffffff;
+  --band:       #f3f5f7;
+  --tint-250:   #f1f7fc;
+  --tint-250-strong: #dcecf9;
 
-  /* Text */
-  --color-text-primary:   #333333;  /* Dark Gray */
-  --color-text-secondary: #373d40;  /* Mid Gray */
-  --color-text-tertiary:  #6b7880;
-  --color-text-success:   #0072c6;  /* PPM Blue — LOD 250 */
-  --color-text-info:      #06487a;  /* Dark Blue — LOD 300 */
+  /* Tier identity: one color per tier, used everywhere */
+  --t200: #5d686f;
+  --t250: var(--ppm-blue);
+  --t300: var(--ppm-dark-blue);
 
-  /* Borders */
-  --color-border-tertiary:  rgba(0,0,0,0.09);
-  --color-border-secondary: rgba(0,0,0,0.16);
-  --color-border-primary:   rgba(0,0,0,0.28);
-  --color-border-success:   #0072c6;  /* PPM Blue */
-  --color-border-info:      #06487a;  /* Dark Blue */
-
-  --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-mono: 'DM Mono', 'Fira Code', 'Consolas', monospace;
-  --border-radius-md: 8px;
-  --border-radius-lg: 12px;
-  --border-radius-xl: 16px;
+  --font: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --bar-h: 64px;
+  --wrap: 1200px;
+  --gutter: clamp(20px, 4vw, 40px);
 }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
-  font-family: var(--font-sans);
-  background: #e9e9e9;
-  color: var(--color-text-primary);
-  min-height: 100vh;
-  padding: 2rem 1.5rem;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
   -webkit-font-smoothing: antialiased;
 }
-.page {
-  max-width: 1200px;
-  margin: 0 auto;
-  background: var(--color-background-primary);
-  border-radius: var(--border-radius-xl);
-  padding: 2rem 2.25rem 2.5rem;
-  border: 0.5px solid var(--color-border-tertiary);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+img { max-width: 100%; display: block; }
+a { color: var(--ppm-blue); text-underline-offset: 3px; }
+a:hover { color: var(--ppm-dark-blue); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--ppm-blue); outline-offset: 2px; border-radius: 4px; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
+.skip { position: absolute; left: -9999px; top: 8px; background: var(--paper); padding: 8px 14px; border-radius: 6px; z-index: 100; }
+.skip:focus { left: 8px; }
+
+/* ───────────── Top bar ───────────── */
+.bar { position: sticky; top: 0; z-index: 40; height: var(--bar-h); background: rgba(255,255,255,0.94); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--line); }
+.bar-in { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: flex; align-items: center; flex-shrink: 0; }
+.brand img { height: 30px; width: auto; }
+.nav { display: flex; gap: 4px; }
+.nav a { font-size: 14px; font-weight: 500; color: var(--ink-soft); text-decoration: none; padding: 8px 12px; border-radius: 6px; }
+.nav a:hover { background: var(--band); color: var(--ink); }
+
+/* ───────────── Hero: one building, three tiers ───────────── */
+.hero { background: var(--band); border-bottom: 1px solid var(--line); }
+.hero-in { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 56px); align-items: start; padding-top: clamp(32px, 5vw, 64px); padding-bottom: clamp(32px, 5vw, 60px); }
+h1 { font-size: clamp(32px, 4.2vw, 48px); line-height: 1.08; font-weight: 600; letter-spacing: -0.022em; color: var(--ppm-navy); }
+.lede { font-size: 17px; line-height: 1.55; color: var(--ink-soft); margin-top: 14px; max-width: 34em; }
+
+.tiers { margin-top: 28px; border-top: 1px solid var(--line); }
+.tier { border-bottom: 1px solid var(--line); }
+.tier-btn { width: 100%; display: flex; align-items: baseline; gap: 12px; padding: 14px 0 14px 16px; background: none; border: 0; border-left: 3px solid transparent; text-align: left; cursor: pointer; }
+.tier-btn:hover .tier-name { color: var(--ink); }
+.tier-code { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 62px; }
+.tier-name { font-size: 16px; font-weight: 500; color: var(--muted); }
+.tier-flag { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--ppm-blue); background: var(--tint-250-strong); padding: 2px 9px; border-radius: 999px; white-space: nowrap; }
+.tier[data-tier="200"] .tier-code { color: var(--t200); }
+.tier[data-tier="250"] .tier-code { color: var(--t250); }
+.tier[data-tier="300"] .tier-code { color: var(--t300); }
+.tier-body { display: none; padding: 0 0 18px 19px; font-size: 15px; line-height: 1.6; color: var(--ink-soft); max-width: 36em; }
+.tier-body small { display: block; margin-top: 8px; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.tier.on .tier-btn { border-left-color: currentColor; }
+.tier.on[data-tier="200"] .tier-btn { color: var(--t200); }
+.tier.on[data-tier="250"] .tier-btn { color: var(--t250); }
+.tier.on[data-tier="300"] .tier-btn { color: var(--t300); }
+.tier.on .tier-name { color: var(--ink); font-weight: 600; }
+.tier.on .tier-body { display: block; }
+
+.stage { min-width: 0; }
+.stack { position: relative; aspect-ratio: 1290 / 676; }
+.stack img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+/* The slider track borrows the scale bar from the PPM logo: coarse blocks that refine into fine ticks */
+.blend { position: relative; margin-top: 18px; height: 28px; }
+.scale { position: absolute; left: 0; right: 0; top: 9px; height: 10px; display: flex; gap: 4px; }
+.scale i { display: block; height: 100%; background: #cdd4d9; border-radius: 1px; transition: background 0.12s; }
+.scale i.fill { background: var(--ppm-blue); }
+.blend input { position: absolute; inset: 0; width: 100%; height: 28px; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; }
+.blend input::-webkit-slider-runnable-track { background: transparent; height: 28px; }
+.blend input::-moz-range-track { background: transparent; height: 28px; }
+.blend input::-webkit-slider-thumb { -webkit-appearance: none; width: 26px; height: 26px; margin-top: 1px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ppm-blue); box-shadow: 0 1px 4px rgba(13,31,47,0.25); }
+.blend input::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ppm-blue); box-shadow: 0 1px 4px rgba(13,31,47,0.25); }
+.stops { display: grid; grid-template-columns: 1fr 1fr 1fr; margin-top: 6px; }
+.stops button { background: none; border: 0; padding: 4px 0; font-size: 13px; font-weight: 500; color: var(--muted); cursor: pointer; text-align: left; font-variant-numeric: tabular-nums; }
+.stops button:nth-child(2) { text-align: center; }
+.stops button:nth-child(3) { text-align: right; }
+.stops button.on { color: var(--ink); font-weight: 700; }
+.stage-hint { font-size: 13px; color: var(--muted); margin-top: 2px; text-align: center; }
+
+/* ───────────── Key facts ───────────── */
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-bottom: 1px solid var(--line); }
+.facts div { padding: 22px 28px 22px 0; }
+.facts div + div { padding-left: 28px; border-left: 1px solid var(--line); }
+.facts dt { font-size: 13px; font-weight: 500; color: var(--muted); }
+.facts dd { font-size: 18px; font-weight: 600; line-height: 1.3; color: var(--ppm-navy); margin-top: 2px; }
+.facts dd span { display: block; font-size: 14px; font-weight: 400; color: var(--ink-soft); margin-top: 3px; line-height: 1.45; }
+
+/* ───────────── Sections ───────────── */
+.section { padding-top: clamp(40px, 6vw, 72px); padding-bottom: clamp(40px, 6vw, 72px); scroll-margin-top: var(--bar-h); }
+h2 { font-size: clamp(24px, 2.6vw, 30px); line-height: 1.2; font-weight: 600; letter-spacing: -0.015em; color: var(--ppm-navy); }
+h3 { font-size: 18px; line-height: 1.3; font-weight: 600; color: var(--ppm-navy); margin-bottom: 10px; }
+.prose { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); margin-top: 28px; }
+.prose p { font-size: 15.5px; line-height: 1.68; color: var(--ink-soft); max-width: 62ch; }
+.prose p + p { margin-top: 14px; }
+
+/* ───────────── Matrix toolbar ───────────── */
+.matrix { background: var(--paper); border-top: 1px solid var(--line); }
+.matrix-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px 32px; flex-wrap: wrap; }
+.matrix-head p { font-size: 15px; color: var(--ink-soft); margin-top: 6px; }
+.tools { display: flex; align-items: center; gap: 10px 12px; flex-wrap: wrap; margin-top: 24px; }
+.row-label { flex: 0 0 68px; font-size: 14px; color: var(--muted); }
+.seg { display: inline-flex; padding: 3px; background: var(--band); border: 1px solid var(--line); border-radius: 10px; }
+.fbtn { font-size: 14px; font-weight: 500; padding: 7px 14px; border: 0; border-radius: 7px; background: transparent; color: var(--ink-soft); cursor: pointer; white-space: nowrap; }
+.fbtn:hover { color: var(--ink); }
+.fbtn[aria-pressed="true"] { background: var(--paper); color: var(--ink); font-weight: 600; box-shadow: 0 0 0 1px var(--line), 0 1px 2px rgba(13,31,47,0.08); }
+.fbtn.fa-250[aria-pressed="true"] { color: var(--t250); }
+.fbtn.fa-300[aria-pressed="true"] { color: var(--t300); }
+.find { position: relative; flex: 1 1 220px; max-width: 300px; margin-left: auto; }
+.find svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); pointer-events: none; }
+.find input { width: 100%; font: inherit; font-size: 14px; color: var(--ink); padding: 9px 12px 9px 36px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+.find input::placeholder { color: var(--muted); }
+.find input:focus { outline: 2px solid var(--ppm-blue); outline-offset: 0; border-color: transparent; }
+.jump { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 4px; margin-top: 10px; }
+.jump .row-label { margin-right: 12px; }
+.jump button { background: none; border: 0; padding: 4px 10px 4px 0; margin-right: 8px; border-radius: 6px; font-size: 14px; font-weight: 500; color: var(--ppm-dark-blue); text-transform: capitalize; cursor: pointer; }
+.jump button:hover { color: var(--ppm-blue); text-decoration: underline; text-underline-offset: 4px; }
+
+/* ───────────── Matrix table ───────────── */
+.tbl-wrap { margin-top: 20px; border: 1px solid var(--line); border-radius: 12px; }
+.stbl { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.stbl col.col-el { width: 19%; }
+.stbl col.col-lod { width: 27%; }
+.stbl th { position: sticky; top: var(--bar-h); z-index: 5; background: var(--paper); text-align: left; vertical-align: bottom; padding: 14px 16px 12px; border-bottom: 1px solid var(--line); font-size: 13px; font-weight: 500; color: var(--muted); }
+.stbl th:first-child { border-top-left-radius: 12px; }
+.stbl th:last-child { border-top-right-radius: 12px; }
+.stbl th b { display: block; font-size: 15px; font-weight: 700; line-height: 1.25; }
+.th-200 b { color: var(--t200); }
+.th-250 b { color: var(--t250); }
+.th-300 b { color: var(--t300); }
+.stbl th.th-250 { background: var(--tint-250); box-shadow: inset 0 3px 0 var(--ppm-blue); }
+.stbl td { padding: 14px 16px; vertical-align: top; border-bottom: 1px solid var(--line-soft); font-size: 14px; line-height: 1.55; color: var(--ink-soft); overflow-wrap: break-word; transition: opacity 0.15s, background 0.15s; }
+.stbl tbody tr:last-child td { border-bottom: 0; }
+.stbl tbody tr:last-child td:first-child { border-bottom-left-radius: 12px; }
+.stbl tbody tr:last-child td:last-child { border-bottom-right-radius: 12px; }
+
+/* Category rows */
+.cath td { text-transform: capitalize; background: var(--band); padding: 10px 16px; font-size: 14px; font-weight: 700; color: var(--ppm-navy); border-bottom: 1px solid var(--line); }
+.erow + .cath td, .irow + .cath td { border-top: 1px solid var(--line); }
+
+/* Element rows */
+.erow { cursor: pointer; }
+/* Hovering or tabbing to a row outlines it in PPM Blue */
+@media (hover: hover) {
+  .erow:hover td { background: #f7fafd; box-shadow: inset 0 2px 0 var(--ppm-blue), inset 0 -2px 0 var(--ppm-blue); }
+  .erow:hover td:first-child { box-shadow: inset 2px 0 0 var(--ppm-blue), inset 0 2px 0 var(--ppm-blue), inset 0 -2px 0 var(--ppm-blue); }
+  .erow:hover td:last-child { box-shadow: inset -2px 0 0 var(--ppm-blue), inset 0 2px 0 var(--ppm-blue), inset 0 -2px 0 var(--ppm-blue); }
+  .erow:hover td.c250 { background: #e9f3fb; }
+}
+.erow:has(.cel:focus-visible) td { box-shadow: inset 0 2px 0 var(--ppm-blue), inset 0 -2px 0 var(--ppm-blue); }
+.erow:has(.cel:focus-visible) td:first-child { box-shadow: inset 2px 0 0 var(--ppm-blue), inset 0 2px 0 var(--ppm-blue), inset 0 -2px 0 var(--ppm-blue); }
+.erow:has(.cel:focus-visible) td:last-child { box-shadow: inset -2px 0 0 var(--ppm-blue), inset 0 2px 0 var(--ppm-blue), inset 0 -2px 0 var(--ppm-blue); }
+.erow .cel:focus-visible { outline: none; }
+.cel { font-weight: 600; color: var(--ink); }
+.stbl td.cel { font-size: 14.5px; color: var(--ink); line-height: 1.4; }
+.cel-inner { display: flex; align-items: flex-start; gap: 10px; }
+.caret { flex-shrink: 0; width: 20px; height: 20px; margin-top: 0; border-radius: 5px; background: var(--band); display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+.caret i { display: block; width: 6px; height: 6px; border-right: 1.75px solid var(--muted); border-top: 1.75px solid var(--muted); transform: translateX(-1px) rotate(45deg); transition: transform 0.18s; }
+.erow:hover .caret { background: var(--line); }
+.erow .caret.open, .erow:hover .caret.open { background: var(--ppm-blue); }
+.caret.open i { border-color: #fff; transform: translateY(-1px) rotate(135deg); }
+
+/* LOD 250 is the standard: its column carries a quiet tint all the way down */
+.c250 { background: var(--tint-250); }
+/* Every LOD 250 cell ends with a small tag saying where it sits between its neighbours */
+.tag, .erow .c250::after { display: block; width: fit-content; font-size: 11.5px; font-weight: 600; line-height: 1; letter-spacing: 0.01em; padding: 4px 8px; border-radius: 4px; white-space: nowrap; }
+.erow .c250::after { margin-top: 10px; }
+.tag-200, .erow .c250-200::after    { color: #4a545a; background: #e3e7ea; }
+.tag-300, .erow .c250-300::after    { color: var(--t300); background: #d3e2ee; }
+.tag-250, .erow .c250-unique::after { color: var(--t250); background: var(--paper); box-shadow: inset 0 0 0 1px #b5d5ee; }
+.erow .c250-200::after    { content: 'Aligns with LOD 200'; }
+.erow .c250-300::after    { content: 'Aligns with LOD 300'; }
+.erow .c250-unique::after { content: 'Custom LOD 250'; }
+
+/* Excluded cells: drafting hatch for "not in scope" */
+.c200:has(.cexc) { background: repeating-linear-gradient(135deg, #e6eaed 0 1.5px, #f7f8f9 1.5px 7px); }
+.cexc { font-weight: 500; color: var(--muted); }
+
+/* Highlight one tier */
+.ft200 .c250, .ft200 .c300, .ft250 .c200, .ft250 .c300, .ft300 .c200, .ft300 .c250 { opacity: 0.38; }
+.ft200 .c250, .ft300 .c250 { background: transparent; }
+.ft200 .c200:not(:has(.cexc)) { background: #eef0f2; color: var(--ink); }
+.ft250 .c250 { background: var(--tint-250-strong); color: var(--ink); }
+.ft300 .c300 { background: #dfe9f1; color: var(--ink); }
+
+/* Expanded comparison image */
+.stbl .irow { display: none; }
+.stbl .irow.open { display: table-row; }
+.stbl .irow td { padding: 0; background: var(--band); border-bottom: 1px solid var(--line); }
+/* The image sits under the three LOD columns only, so its three panels line up with them.
+   19% is the Element column width (col.col-el); keep the two in step. */
+.iexpand { padding: 0 0 14px 19%; display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
+.iimg-btn { display: block; width: 100%; padding: 0; border: 0; border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; overflow: hidden; background: var(--paper); cursor: zoom-in; }
+.ireal { width: 100%; height: auto; }
+.iload { width: 100%; aspect-ratio: 3 / 2; border-radius: 0; background: var(--line-soft); display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--muted); }
+.inote { font-size: 13px; color: var(--muted); text-align: center; }
+
+.empty { display: none; padding: 40px 16px; text-align: center; font-size: 15px; color: var(--ink-soft); }
+.empty button { margin-left: 6px; background: none; border: 0; color: var(--ppm-blue); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* ───────────── Image viewer ───────────── */
+.viewer { border: 0; padding: 0; background: transparent; max-width: none; max-height: none; width: 100vw; height: 100vh; }
+.viewer::backdrop { background: rgba(13,31,47,0.92); }
+.viewer-in { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 56px 20px 20px; }
+.viewer img { max-width: min(1500px, 100%); max-height: 100%; border-radius: 8px; background: #fff; }
+.viewer-close { position: fixed; top: 12px; right: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; font-size: 14px; font-weight: 500; color: #fff; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); border-radius: 8px; cursor: pointer; }
+.viewer-close:hover { background: rgba(255,255,255,0.22); }
+
+/* ───────────── Footer ───────────── */
+.foot { background: var(--ppm-navy); color: #c9d3dc; }
+.foot-in { display: flex; align-items: center; justify-content: space-between; gap: 24px 48px; flex-wrap: wrap; padding-top: 36px; padding-bottom: 36px; }
+.foot img { height: 30px; width: auto; }
+.foot p { font-size: 14px; line-height: 1.55; max-width: 56ch; }
+
+/* ───────────── Small screens ───────────── */
+@media (max-width: 900px) {
+  .hero-in { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+  .hero-copy { display: contents; }
+  h1 { order: 1; }
+  .lede { order: 2; }
+  .stage { order: 3; margin-top: 20px; }
+  .tiers { order: 4; }
+  .tier-btn { flex-wrap: wrap; row-gap: 6px; }
+  .tier-name { white-space: nowrap; }
+  .tier-flag { margin-left: 74px; }
+  .prose { grid-template-columns: 1fr; }
+  .facts { grid-template-columns: 1fr; }
+  .facts div { padding: 16px 0; }
+  .facts div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+}
+@media (max-width: 760px) {
+  :root { --bar-h: 56px; }
+  .brand img { height: 24px; }
+  .nav a { padding: 8px; font-size: 13px; }
+  .tools { position: sticky; top: var(--bar-h); z-index: 6; background: var(--paper); padding: 10px var(--gutter); margin: 14px calc(var(--gutter) * -1) 0; border-bottom: 1px solid var(--line); }
+  .tools .row-label { display: none; }
+  .seg { width: 100%; }
+  .find { margin-left: 0; }
+  .jump .row-label { flex-basis: 100%; }
+  .fbtn { flex: 1; padding: 8px 4px; font-size: 13px; }
+  .find { max-width: none; flex-basis: 100%; }
+
+  /* The table becomes one block per element */
+  .tbl-wrap { border-left: 0; border-right: 0; border-radius: 0; margin-left: calc(var(--gutter) * -1); margin-right: calc(var(--gutter) * -1); }
+  .stbl, .stbl tbody, .stbl tr, .stbl td { display: block; width: 100%; }
+  .stbl thead, .stbl colgroup { display: none; }
+  .stbl td { border-bottom: 0; padding: 10px var(--gutter); }
+  .stbl td.cel { padding-top: 16px; font-size: 16px; }
+  .erow { border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .erow:hover td, .erow:hover td:first-child, .erow:hover td:last-child,
+  .erow:has(.cel:focus-visible) td, .erow:has(.cel:focus-visible) td:first-child, .erow:has(.cel:focus-visible) td:last-child { box-shadow: none; }
+  .erow:has(.cel:focus-visible) { outline: 2px solid var(--ppm-blue); outline-offset: -2px; }
+  .erow td.c200::before, .erow td.c250::before, .erow td.c300::before { display: block; font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .erow td.c200::before { content: 'LOD 200'; color: var(--t200); }
+  .erow td.c300::before { content: 'LOD 300'; color: var(--t300); }
+  .erow td.c250::before { content: 'LOD 250, PPM Standard'; color: var(--t250); }
+  .cath td { padding: 10px var(--gutter); }
+  .stbl .irow.open { display: block; }
+  .iexpand { padding: 0 0 14px; }
+  .iimg-btn { border-left: 0; }
+  /* With one tier highlighted, show only that tier */
+  .ft200 .erow .c250, .ft200 .erow .c300, .ft250 .erow .c200, .ft250 .erow .c300, .ft300 .erow .c200, .ft300 .erow .c250 { display: none; }
 }
 
-/* Tier cards */
-.tier-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
-.tier-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
-.tier-card.featured { border: 2px solid var(--color-border-success); }
-.tc-img { background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); position: relative; }
-.tc-body { padding: 0.9rem 1.1rem; }
-.tc-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
-.tc-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 7px; }
-.tc-desc { font-size: 11px; color: var(--color-text-secondary); line-height: 1.6; }
-.l200 { color: var(--color-text-secondary); }
-.l250 { color: var(--color-text-success); }
-.l300 { color: var(--color-text-info); }
-.ppm-badge { display: inline-block; font-size: 9px; background: #0072c6; color: #ffffff; padding: 2px 7px; border-radius: var(--border-radius-md); margin-left: 6px; vertical-align: middle; font-weight: 500; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}
 
-/* Filter bar */
-.fbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 1.25rem; }
-.fbtn { font-size: 12px; font-family: var(--font-sans); padding: 5px 13px; cursor: pointer; border-radius: var(--border-radius-md); transition: all 0.15s; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); white-space: nowrap; }
-.fbtn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
-.fbtn.fa-all { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
-.fbtn.fa-200 { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
-.fbtn.fa-250 { background: #0072c6; color: #ffffff; border-color: #0072c6; font-weight: 500; }
-.fbtn.fa-300 { background: #06487a; color: #ffffff; border-color: #06487a; font-weight: 500; }
-
-/* Table */
-.tbl-wrap { overflow-x: auto; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); }
-.stbl { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
-.stbl col.col-el { width: 20%; }
-.stbl col.col-lod { width: 26.7%; }
-.stbl th { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); border-bottom: 1px solid var(--color-border-secondary); padding: 9px 11px; text-align: left; vertical-align: bottom; line-height: 1.4; }
-.stbl td { padding: 9px 11px; text-align: left; vertical-align: top; border-bottom: 0.5px solid var(--color-border-tertiary); line-height: 1.55; word-wrap: break-word; overflow-wrap: break-word; }
-.stbl tbody tr:last-child td { border-bottom: none; }
-.th-250 { box-shadow: inset 2px 0 0 #0072c6, inset -2px 0 0 #0072c6, inset 0 2px 0 #0072c6; }
-.th-250 .lbl { color: #0072c6; }
-.th-300 .lbl { color: #06487a; }
-.c250 { box-shadow: inset 2px 0 0 #0072c6, inset -2px 0 0 #0072c6; }
-.stbl tbody tr:last-child .c250 { box-shadow: inset 2px 0 0 #0072c6, inset -2px 0 0 #0072c6, inset 0 -2px 0 #0072c6; }
-
-/* Cell types */
-.cel { color: var(--color-text-primary); font-weight: 500; font-size: 12px; }
-.c200, .c250, .c300 { color: var(--color-text-secondary); transition: opacity 0.2s, background 0.2s; }
-.cexc { color: var(--ppm-blue); font-style: normal; font-size: 11px; font-weight: 500; }
-.cath td { background: #373d40; font-size: 10px; font-weight: 500; color: #ffffff; text-transform: uppercase; letter-spacing: 0.09em; padding: 5px 11px; }
-
-/* Column background tints
-   200  = pale sky blue  (#53aaeb @ 20%)  → #dceefb
-   300  = steel gray-blue (#06487a @ 25%) → #c0d1de  (clearly more muted/gray)
-   250u = vivid cobalt   (#0072c6 @ 35%) → #a6ceeb  (clearly darker than 200, bluer than 300)
-   exc  = light red      (#d22 @ 15%)    → #f8dede
-*/
-.c200                { background: rgba(83,170,235,0.20); }
-.c200:has(.cexc)     { background: rgba(210,40,40,0.15); }
-.c300                { background: rgba(6,72,122,0.25); }
-.c250-200            { background: rgba(83,170,235,0.20); }
-.c250-300            { background: rgba(6,72,122,0.25); }
-.c250-unique         { background: rgba(0,114,198,0.35); }
-
-/* Filter states — more saturated so active highlight is clearly visible above base */
-.ft200 .c250, .ft200 .c300 { opacity: 0.2; }
-.ft200 .c200 { background: rgba(83,170,235,0.45); }
-.ft250 .c200, .ft250 .c300 { opacity: 0.2; }
-.ft250 .c250 { background: rgba(0,114,198,0.52); }
-.ft300 .c200, .ft300 .c250 { opacity: 0.2; }
-.ft300 .c300 { background: rgba(6,72,122,0.48); }
-
-/* Expand / chevron */
-.cel-inner { display: flex; align-items: center; gap: 7px; }
-.caret { flex-shrink: 0; width: 16px; height: 16px; border-radius: 4px; background: var(--color-background-secondary); display: flex; align-items: center; justify-content: center; transition: background 0.15s, transform 0.2s; }
-.caret i { font-size: 10px; color: var(--color-text-tertiary); line-height: 1; transition: transform 0.2s; display: block; }
-.erow > .cel { cursor: pointer; user-select: none; }
-.erow > .cel:hover .caret { background: var(--color-background-tertiary); }
-.erow > .cel:hover .caret i { color: var(--color-text-secondary); }
-.caret.open { background: #0072c6; }
-.caret.open i { color: #ffffff; transform: rotate(90deg); }
-
-/* Image expand row */
-.irow { display: none; }
-.irow.open { display: table-row; }
-.irow td { padding: 0; border-bottom: 0.5px solid var(--color-border-secondary) !important; }
-.iexpand { padding: 12px 11px 16px; background: var(--color-background-secondary); }
-.iimg-wrap { position: relative; border-radius: var(--border-radius-md); overflow: hidden; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); }
-.iph { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 32px 20px; border: 1px dashed var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); }
-.iph i { font-size: 22px; color: var(--color-text-tertiary); }
-.iph-fn { font-size: 10px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
-.iph-hint { font-size: 10px; color: var(--color-text-tertiary); }
-.ireal { width: 100%; display: block; }
-.icap { font-size: 10px; color: var(--color-text-tertiary); margin-top: 8px; text-align: center; font-style: italic; }
-
-/* Tier images */
-.tiph { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; aspect-ratio: 16/9; width: 100%; }
-.tiph i { font-size: 20px; color: var(--color-text-tertiary); }
-.tiph-fn { font-size: 10px; color: var(--color-text-tertiary); font-family: var(--font-mono); }
-.tireal { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: none; }
-.tc-img { cursor: pointer; }
-.tc-img-hover { position: relative; }
-.tc-img-hover::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background 0.18s; }
-.tc-img-hover:hover::after { background: rgba(0,0,0,0.12); }
-.tc-img-zoom { position: absolute; top: 8px; right: 8px; z-index: 2; background: rgba(0,0,0,0.45); border-radius: 6px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.18s; pointer-events: none; }
-.tc-img-zoom i { font-size: 13px; color: #fff; }
-.tc-img-hover:hover .tc-img-zoom { opacity: 1; }
-
-/* Lightbox */
-.lbx { position: fixed; inset: 0; background: rgba(10,18,28,0.95); z-index: 2000; display: none; align-items: center; justify-content: center; }
-.lbx.open { display: flex; }
-.lbx-close { position: fixed; top: 18px; right: 20px; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s; }
-.lbx-close:hover { background: rgba(255,255,255,0.2); }
-.lbx-close i { font-size: 15px; }
-.lbx-inner { display: flex; flex-direction: column; align-items: stretch; gap: 14px; width: min(92vw, 1100px); }
-.lbx-stack { position: relative; width: 100%; border-radius: 10px; overflow: hidden; background: #fff; }
-.lbx-cimg { width: 100%; max-height: 72vh; object-fit: contain; display: block; }
-.lbx-cimg:not(:first-child) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
-.lbx-ctrl { display: flex; flex-direction: column; gap: 7px; }
-.lbx-stops { display: grid; grid-template-columns: 1fr 1fr 1fr; font-size: 10px; font-weight: 500; letter-spacing: 0.05em; color: rgba(255,255,255,0.28); user-select: none; }
-.lbx-stops span { cursor: pointer; transition: color 0.18s; padding: 2px 0; }
-.lbx-stops span:nth-child(2) { text-align: center; }
-.lbx-stops span:nth-child(3) { text-align: right; }
-.lbx-stops span.active { color: #fff; }
-.lbx-range { width: 100%; -webkit-appearance: none; appearance: none; height: 3px; border-radius: 3px; background: rgba(255,255,255,0.15); outline: none; cursor: pointer; }
-.lbx-range::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: #fff; cursor: pointer; box-shadow: 0 1px 6px rgba(0,0,0,0.5); transition: transform 0.1s; }
-.lbx-range::-webkit-slider-thumb:hover { transform: scale(1.15); }
-.lbx-range::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: #fff; cursor: pointer; border: none; box-shadow: 0 1px 6px rgba(0,0,0,0.5); }
-.lbx-hint { font-size: 10px; color: rgba(255,255,255,0.25); text-align: center; }
-
-/* Print */
 @media print {
-  body { background: white; padding: 0; }
-  .page { box-shadow: none; border: none; padding: 1rem; max-width: 100%; }
-  .fbar { display: none; }
-  .c200, .c250, .c300 { opacity: 1 !important; background: transparent !important; }
+  .bar { position: static; }
+  .nav, .tools, .jump, .blend, .stops, .stage-hint, .skip, .caret { display: none !important; }
+  .hero { background: none; }
+  .tier-body { display: block !important; }
+  .stbl th { position: static; }
+  .stbl td, .stbl th { font-size: 10.5px; padding: 6px 8px; }
+  .c200, .c250, .c300 { opacity: 1 !important; }
   .irow { display: none !important; }
+  .erow, .cath { break-inside: avoid; }
+  .foot { background: none; color: var(--ink); border-top: 1px solid var(--line); }
+  .foot img { display: none; }
 }
 </style>
 </head>
 <body>
-<div class="page">
+<a class="skip" href="#matrix">Skip to the LOD matrix</a>
 
-<p style="font-size:14px;font-weight:700;color:var(--ppm-blue);text-transform:uppercase;letter-spacing:.09em;margin-bottom:1rem">LOD Summary</p>
-
-<p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:.9rem">Our LOD framework follows the <a href="https://bimforum.org/resource/lod-level-of-development-lod-specification/" target="_blank" rel="noopener noreferrer" style="color:var(--ppm-blue);text-decoration:underline">AIA / BIMForum LOD Specification</a> principles, adapted for as-built modeling. Because PPM models existing conditions rather than design intent, these standards are applied to define the level of geometry and detail included based on what is visible, verifiable, and within the project scope.</p>
-
-<p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:.9rem">Our standard deliverable is LOD 250 — a PPM-defined tier, not a formally defined AIA level. It sits between LOD 200 and LOD 300: some elements align more closely with one, some with the other, and many fall in between. This provides a practical benchmark that balances model usability, geometric development, and production efficiency.</p>
-
-<p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:.9rem">LOD terminology is not applied consistently across the industry, and some external organizations use their own definitions of LOD 250. Those definitions do not govern PPM deliverables. The PPM LOD matrix and the project scope of work define the requirements and inclusions for each PPM LOD tier. For additional clarification on how a specific element, condition, or project requirement is classified, contact a PPM representative.</p>
-
-<p class="tc-name" style="margin-top:1.25rem;margin-bottom:.5rem">LOD vs. LOA</p>
-<p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:.9rem">Level of Development (LOD) and Level of Accuracy (LOA) describe two different aspects of a model.</p>
-
-<p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:.9rem">LOD defines the level of geometric development and detail included in modeled elements. LOA defines how closely the modeled geometry represents measured field conditions. These are established independently, meaning a highly detailed element is not necessarily more accurate.</p>
-
-<p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:.9rem">Unless otherwise noted in the project scope, PPM Scan-to-BIM deliverables are produced to a target represented accuracy of ±1 inch relative to visible, accessible, and adequately field-documented existing conditions. This target is generally aligned with <a href="https://usibd.org/level-of-accuracy/" target="_blank" rel="noopener noreferrer" style="color:var(--ppm-blue);text-decoration:underline">USIBD LOA 20</a>.</p>
-
-<p style="font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:0">For additional clarification on accuracy expectations for a specific project, condition, or deliverable, contact a PPM representative.</p>
-
-<div style="border-top:1px solid var(--color-border-tertiary);margin:2rem 0 1.5rem"></div>
-<p style="font-size:14px;font-weight:700;color:var(--ppm-blue);text-transform:uppercase;letter-spacing:.09em;margin-bottom:.6rem">LOD Comparison</p>
-<div class="tier-grid">
-  <div class="tier-card">
-    <div class="tc-img tc-img-hover" onclick="lbxOpen(0)">
-      <span class="tc-img-zoom"><i class="ti ti-arrows-maximize"></i></span>
-      <div class="tiph" id="tiph-200"><i class="ti ti-photo"></i><span class="tiph-fn">images/lod-200.png</span></div>
-      <img class="tireal" id="timg-200" src="images/lod-200.png" alt="LOD 200 — Generic">
-    </div>
-    <div class="tc-body">
-      <p class="tc-label l200">LOD 200</p>
-      <p class="tc-name">Generic</p>
-      <p class="tc-desc">A simplified 3D model with verified overall geometry based on field-documented conditions, including size, location, and orientation. Elements are modeled as generic objects with minimal or omitted materials and detailing.</p>
-    </div>
+<header class="bar">
+  <div class="wrap bar-in">
+    <a class="brand" href="#top" aria-label="Precision Property Measurements, back to top"><img src="images/ppm-logo.png" width="720" height="121" alt="PPM Precision Property Measurements"></a>
+    <nav class="nav" aria-label="On this page">
+      <a href="#tiers">Tiers</a>
+      <a href="#definitions">Definitions</a>
+      <a href="#matrix">Matrix</a>
+    </nav>
   </div>
-  <div class="tier-card featured">
-    <div class="tc-img tc-img-hover" onclick="lbxOpen(1)">
-      <span class="tc-img-zoom"><i class="ti ti-arrows-maximize"></i></span>
-      <div class="tiph" id="tiph-250"><i class="ti ti-photo"></i><span class="tiph-fn">images/lod-250.png</span></div>
-      <img class="tireal" id="timg-250" src="images/lod-250.png" alt="LOD 250 — PPM Standard">
-    </div>
-    <div class="tc-body">
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px">
-        <p class="tc-label l250" style="margin:0">LOD 250</p>
-        <span class="ppm-badge">PPM Standard</span>
+</header>
+
+<main id="top">
+
+<!-- Hero: the three tiers on one building -->
+<section class="hero" id="tiers" aria-labelledby="page-title">
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <h1 id="page-title">LOD Scope Reference</h1>
+      <p class="lede">What each PPM LOD tier includes, shown on one building and then element by element.</p>
+
+      <div class="tiers" id="tier-list">
+        <div class="tier" data-tier="200">
+          <button class="tier-btn" type="button" aria-expanded="false" aria-controls="tb-200" onclick="blendSnap(0)">
+            <span class="tier-code">LOD 200</span><span class="tier-name">Generic</span>
+          </button>
+          <p class="tier-body" id="tb-200">A simplified 3D model with verified overall geometry based on field-documented conditions, including size, location, and orientation. Elements are modeled as generic objects with minimal or omitted materials and detailing.</p>
+        </div>
+        <div class="tier on" data-tier="250">
+          <button class="tier-btn" type="button" aria-expanded="true" aria-controls="tb-250" onclick="blendSnap(100)">
+            <span class="tier-code">LOD 250</span><span class="tier-name">PPM Standard</span><span class="tier-flag">Our standard deliverable</span>
+          </button>
+          <p class="tier-body" id="tb-250">Our standard existing conditions BIM deliverable. It includes verified overall geometry with a consistent mix of LOD 200 generic elements and LOD 300 specific elements, keeping the model efficient while still highly usable.</p>
+        </div>
+        <div class="tier" data-tier="300">
+          <button class="tier-btn" type="button" aria-expanded="false" aria-controls="tb-300" onclick="blendSnap(200)">
+            <span class="tier-code">LOD 300</span><span class="tier-name">Specific</span>
+          </button>
+          <p class="tier-body" id="tb-300">A further developed BIM deliverable, aligned with AIA LOD 300 and applied to existing conditions. Elements are modeled as specific components with verified size, shape, and placement, with added detail such as materials, profiles, and major architectural features when they are visible and verifiable.<small>This does not include fabrication-level detail or concealed construction, such as finished wall, floor, ceiling, or roof assemblies.</small></p>
+        </div>
       </div>
-      <p class="tc-name">PPM Standard</p>
-      <p class="tc-desc">Our standard as-built BIM deliverable. It includes verified overall geometry with a consistent mix of LOD 200 generic elements and LOD 300 specific elements, keeping the model efficient while still highly usable.</p>
+    </div>
+
+    <div class="stage">
+      <div class="stack">
+        <img id="blend-200" src="images/lod-200.png" width="1290" height="676" alt="The sample building modeled at LOD 200: plain massing with generic openings" style="opacity:0">
+        <img id="blend-250" src="images/lod-250.png" width="1290" height="676" alt="The same building at LOD 250: exterior materials, trim and window detail added">
+        <img id="blend-300" src="images/lod-300.png" width="1290" height="676" alt="The same building at LOD 300: specific profiles, trim and detail throughout" style="opacity:0">
+      </div>
+      <div class="blend">
+        <div class="scale" id="scale" aria-hidden="true"></div>
+        <input type="range" id="blend-slider" min="0" max="200" step="1" value="100" aria-label="Blend the model between LOD 200, LOD 250 and LOD 300">
+      </div>
+      <div class="stops" id="stops">
+        <button type="button" onclick="blendSnap(0)">LOD 200</button>
+        <button type="button" class="on" onclick="blendSnap(100)">LOD 250</button>
+        <button type="button" onclick="blendSnap(200)">LOD 300</button>
+      </div>
+      <p class="stage-hint">Drag to compare the same building at each tier.</p>
     </div>
   </div>
-  <div class="tier-card">
-    <div class="tc-img tc-img-hover" onclick="lbxOpen(2)">
-      <span class="tc-img-zoom"><i class="ti ti-arrows-maximize"></i></span>
-      <div class="tiph" id="tiph-300"><i class="ti ti-photo"></i><span class="tiph-fn">images/lod-300.png</span></div>
-      <img class="tireal" id="timg-300" src="images/lod-300.png" alt="LOD 300 — Specific">
+</section>
+
+<div class="wrap">
+  <dl class="facts">
+    <div><dt>Standard Deliverable</dt><dd>LOD 250<span>A PPM-defined tier between LOD 200 and LOD 300.</span></dd></div>
+    <div><dt>What Gets Modeled</dt><dd>Existing Conditions<span>What is visible, verifiable, and within the project scope.</span></dd></div>
+    <div><dt>Target Accuracy</dt><dd>±1 Inch<span>Generally aligned with USIBD LOA 20.</span></dd></div>
+  </dl>
+</div>
+
+<!-- Definitions -->
+<section class="section wrap" id="definitions" aria-labelledby="def-title">
+  <h2 id="def-title">How PPM Defines LOD</h2>
+  <div class="prose">
+    <div>
+      <h3>The PPM LOD Framework</h3>
+      <p>Our LOD framework follows the <a href="https://bimforum.org/resource/lod-level-of-development-lod-specification/" target="_blank" rel="noopener noreferrer">AIA / BIMForum LOD Specification</a> principles, adapted for existing conditions modeling. Because PPM models existing conditions rather than design intent, these standards are applied to define the level of geometry and detail included based on what is visible, verifiable, and within the project scope.</p>
+      <p>Our standard deliverable is LOD 250 — a PPM-defined tier, not a formally defined AIA level. It sits between LOD 200 and LOD 300: some elements align more closely with one, some with the other, and many fall in between. This provides a practical benchmark that balances model usability, geometric development, and production efficiency.</p>
+      <p>LOD terminology is not applied consistently across the industry, and some external organizations use their own definitions of LOD 250. Those definitions do not govern PPM deliverables. The PPM LOD matrix and the project scope of work define the requirements and inclusions for each PPM LOD tier.</p>
     </div>
-    <div class="tc-body">
-      <p class="tc-label l300">LOD 300</p>
-      <p class="tc-name">Specific</p>
-      <p class="tc-desc">A further developed BIM deliverable, aligned with AIA LOD 300 and applied to existing conditions. Elements are modeled as specific components with verified size, shape, and placement, with added detail such as materials, profiles, and major architectural features when they are visible and verifiable.
-*This does not include fabrication-level detail or concealed construction, such as finished wall, floor, ceiling, or roof assemblies.*</p>
+    <div>
+      <h3>LOD vs. LOA</h3>
+      <p>Level of Development (LOD) and Level of Accuracy (LOA) describe two different aspects of a model.</p>
+      <p>LOD defines the level of geometric development and detail included in modeled elements. LOA defines how closely the modeled geometry represents measured field conditions. These are established independently, meaning a highly detailed element is not necessarily more accurate.</p>
+      <p>Unless otherwise noted in the project scope, PPM Scan-to-BIM deliverables are produced to a target represented accuracy of ±1 inch relative to visible, accessible, and adequately field-documented existing conditions. This target is generally aligned with <a href="https://usibd.org/level-of-accuracy/" target="_blank" rel="noopener noreferrer">USIBD LOA 20</a>.</p>
     </div>
   </div>
-</div>
+</section>
 
-<div style="border-top:1px solid var(--color-border-tertiary);margin:2rem 0 1.5rem"></div>
-<p style="font-size:14px;font-weight:700;color:var(--ppm-blue);text-transform:uppercase;letter-spacing:.09em;margin-bottom:1rem">LOD Matrix</p>
+<!-- Matrix -->
+<section class="matrix" id="matrix" aria-labelledby="matrix-title">
+  <div class="section wrap">
+    <div class="matrix-head">
+      <div>
+        <h2 id="matrix-title">LOD Matrix</h2>
+        <p>Select any element to see it modeled at all three tiers.</p>
+      </div>
+    </div>
 
-<div class="fbar">
-  <span style="font-size:11px;color:var(--color-text-tertiary)">Highlight tier:</span>
-  <button class="fbtn fa-all" onclick="sf('all',this)">All tiers</button>
-  <button class="fbtn" onclick="sf('200',this)">LOD 200</button>
-  <button class="fbtn" onclick="sf('250',this)">LOD 250 — PPM Standard</button>
-  <button class="fbtn" onclick="sf('300',this)">LOD 300</button>
-  <span style="font-size:11px;color:var(--color-text-tertiary);margin-left:8px">
-    <i class="ti ti-chevron-right" style="font-size:11px;vertical-align:-1px"></i> Click any element to view LOD comparison
-  </span>
-</div>
+    <div class="tools">
+      <span class="row-label" id="hl-label">Highlight</span>
+      <div class="seg" role="group" aria-labelledby="hl-label">
+        <button class="fbtn fa-all" type="button" aria-pressed="true" onclick="sf('all',this)">All tiers</button>
+        <button class="fbtn fa-200" type="button" aria-pressed="false" onclick="sf('200',this)">LOD 200</button>
+        <button class="fbtn fa-250" type="button" aria-pressed="false" onclick="sf('250',this)">LOD 250</button>
+        <button class="fbtn fa-300" type="button" aria-pressed="false" onclick="sf('300',this)">LOD 300</button>
+      </div>
+      <label class="find">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="find" placeholder="Find an element, e.g. windows" aria-label="Find an element in the matrix" autocomplete="off">
+      </label>
+    </div>
 
-<div class="tbl-wrap">
+    <nav class="jump" id="jump" aria-label="Jump to a category"><span class="row-label">Jump to</span></nav>
+
+
+    <div class="tbl-wrap">
 <table class="stbl" id="tbl">
 <colgroup>
   <col class="col-el">
@@ -285,10 +448,10 @@ body {
 </colgroup>
 <thead>
 <tr>
-  <th>Element</th>
-  <th class="th-200">LOD 200</th>
-  <th class="th-250"><span class="lbl">LOD 250<span class="ppm-badge">PPM Standard</span></span></th>
-  <th class="th-300"><span class="lbl">LOD 300</span></th>
+  <th scope="col">Element</th>
+  <th scope="col" class="th-200"><b>LOD 200</b>Generic</th>
+  <th scope="col" class="th-250"><b>LOD 250</b>PPM Standard</th>
+  <th scope="col" class="th-300"><b>LOD 300</b>Specific</th>
 </tr>
 </thead>
 <tbody>
@@ -340,62 +503,84 @@ body {
 
 </tbody>
 </table>
-</div>
-
-</div>
-
-<!-- Lightbox -->
-<div class="lbx" id="lbx" onclick="lbxBgClick(event)">
-  <button class="lbx-close" onclick="lbxClose()"><i class="ti ti-x"></i></button>
-  <div class="lbx-inner">
-    <div class="lbx-stack">
-      <img class="lbx-cimg" id="lbx-c200" src="images/lod-200.png" alt="LOD 200">
-      <img class="lbx-cimg" id="lbx-c250" src="images/lod-250.png" alt="LOD 250" style="opacity:0">
-      <img class="lbx-cimg" id="lbx-c300" src="images/lod-300.png" alt="LOD 300" style="opacity:0">
-    </div>
-    <div class="lbx-ctrl">
-      <div class="lbx-stops">
-        <span class="active" onclick="lbxSnap(0)">LOD 200 — Generic</span>
-        <span onclick="lbxSnap(100)">LOD 250 — PPM Standard</span>
-        <span onclick="lbxSnap(200)">LOD 300 — Specific</span>
-      </div>
-      <input class="lbx-range" type="range" id="lbx-slider" min="0" max="200" value="0" step="1">
-      <p class="lbx-hint">Drag to blend between tiers &nbsp;·&nbsp; Click a label to jump &nbsp;·&nbsp; ← → keys &nbsp;·&nbsp; Esc to close</p>
+      <p class="empty" id="empty">No elements match that search.<button type="button" onclick="clearFind()">Show all elements</button></p>
     </div>
   </div>
-</div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <img src="images/ppm-logo-white.png" width="720" height="122" alt="PPM Precision Property Measurements">
+  </div>
+</footer>
+
+<!-- Full-size image viewer -->
+<dialog class="viewer" id="viewer" aria-label="Full-size LOD comparison">
+  <button class="viewer-close" type="button" onclick="document.getElementById('viewer').close()">Close</button>
+  <div class="viewer-in" onclick="if(event.target===this)document.getElementById('viewer').close()"><img id="viewer-img" alt=""></div>
+</dialog>
 
 <script>
-// Wire up tier header images
-['200','250','300'].forEach(function(lod) {
-  var img = document.getElementById('timg-' + lod);
-  var ph  = document.getElementById('tiph-' + lod);
-  if (!img) return;
-  function show() { ph.style.display = 'none'; img.style.display = 'block'; }
-  img.addEventListener('load',  show);
-  img.addEventListener('error', function() { img.style.display = 'none'; });
-  if (img.complete && img.naturalWidth > 0) show();
-});
+// File type for the per-element comparison images at images/{slug}.{IMG_EXT}
+var IMG_EXT = 'png';
 
-// Auto-match the LOD 250 cell color when its definition is identical to LOD 200 or LOD 300
-document.addEventListener('DOMContentLoaded', function() {
-  function norm(td) { return td ? td.textContent.replace(/\s+/g, ' ').trim().toLowerCase() : null; }
-  document.querySelectorAll('tr.erow').forEach(function(row) {
-    var c200 = row.querySelector('td.c200');
-    var c250 = row.querySelector('td.c250');
-    var c300 = row.querySelector('td.c300');
-    if (!c250) return;
-    var t250 = norm(c250);
-    if (!t250) return;
-    var match = (t250 === norm(c200)) ? 'c250-200' : (t250 === norm(c300)) ? 'c250-300' : null;
-    if (!match) return;
-    c250.classList.remove('c250-200', 'c250-300', 'c250-unique');
-    c250.classList.add(match);
+/* ── Hero: blend one building across the three tiers ── */
+var slider = document.getElementById('blend-slider');
+var scale  = document.getElementById('scale');
+var BARS = 30;
+(function buildScale() {
+  // Bars start wide and get finer, like the scale bar in the PPM logo
+  for (var i = 0; i < BARS; i++) {
+    var b = document.createElement('i');
+    b.style.flex = (BARS - i * 0.86).toFixed(2) + ' 1 0';
+    scale.appendChild(b);
+  }
+})();
+function blendUpdate() {
+  var v = parseInt(slider.value, 10);
+  document.getElementById('blend-200').style.opacity = v <= 100 ? (100 - v) / 100 : 0;
+  document.getElementById('blend-250').style.opacity = v <= 100 ? v / 100 : (200 - v) / 100;
+  document.getElementById('blend-300').style.opacity = v <= 100 ? 0 : (v - 100) / 100;
+  var active = v < 50 ? 0 : v <= 150 ? 1 : 2;
+  document.querySelectorAll('#tier-list .tier').forEach(function(t, i) {
+    t.classList.toggle('on', i === active);
+    t.querySelector('.tier-btn').setAttribute('aria-expanded', i === active ? 'true' : 'false');
   });
+  document.querySelectorAll('#stops button').forEach(function(s, i) { s.classList.toggle('on', i === active); });
+  var bars = scale.children, x = 0, total = 0, w = [];
+  for (var i = 0; i < bars.length; i++) { w[i] = parseFloat(bars[i].style.flexGrow); total += w[i]; }
+  for (var j = 0; j < bars.length; j++) { bars[j].classList.toggle('fill', (x + w[j] / 2) / total <= v / 200 + 0.001); x += w[j]; }
+  slider.setAttribute('aria-valuetext', ['LOD 200', 'LOD 250', 'LOD 300'][active]);
+}
+function blendSnap(v) { slider.value = v; blendUpdate(); }
+slider.addEventListener('input', blendUpdate);
+slider.addEventListener('change', function() {
+  var v = parseInt(this.value, 10);
+  blendSnap([0, 100, 200].reduce(function(a, b) { return Math.abs(b - v) < Math.abs(a - v) ? b : a; }));
+});
+slider.addEventListener('keydown', function(e) {
+  var v = parseInt(this.value, 10);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowDown')  { e.preventDefault(); blendSnap(v <= 100 ? 0 : 100); }
+  if (e.key === 'ArrowRight' || e.key === 'ArrowUp')   { e.preventDefault(); blendSnap(v < 100 ? 100 : 200); }
+});
+blendUpdate();
+
+/* ── Matrix ── */
+// Label the LOD 250 cell when its definition is identical to LOD 200 or LOD 300
+document.querySelectorAll('tr.erow').forEach(function(row) {
+  function norm(td) { return td ? td.textContent.replace(/\s+/g, ' ').trim().toLowerCase() : null; }
+  var c250 = row.querySelector('td.c250');
+  if (!c250 || !norm(c250)) return;
+  var t250 = norm(c250);
+  var match = (t250 === norm(row.querySelector('td.c200'))) ? 'c250-200' : (t250 === norm(row.querySelector('td.c300'))) ? 'c250-300' : null;
+  if (!match) return;
+  c250.classList.remove('c250-200', 'c250-300', 'c250-unique');
+  c250.classList.add(match);
 });
 
-// Build image expand rows from data-slug attributes
-document.addEventListener('DOMContentLoaded', function() {
+(function buildRows() {
   var labels = {
     'walls':'Walls','floors':'Floors','ceilings':'Ceilings','roofs':'Roofs','doors':'Doors','windows':'Windows / Openings','stairs':'Stairs / Elevators / Shafts',
     'casework':'Built-in Cabinetry / Counters','appliances':'Major Appliances','plumbing':'Plumbing Fixtures','wall-elements':'Attached wall elements (shelves, mirrors)',
@@ -409,133 +594,136 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('[data-slug]').forEach(function(cell) {
     var slug = cell.getAttribute('data-slug');
     var erow = cell.closest('tr');
+    var name = labels[slug] || slug;
 
-    // Wire up click
-    cell.addEventListener('click', function() { tog(slug); });
+    // The whole row opens the comparison; the element cell is the keyboard control
+    cell.setAttribute('role', 'button');
+    cell.setAttribute('tabindex', '0');
+    cell.setAttribute('aria-expanded', 'false');
+    cell.setAttribute('aria-controls', 'irow-' + slug);
+    erow.addEventListener('click', function() { tog(slug); });
+    cell.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tog(slug); }
+    });
 
-    // Build image row
     var irow = document.createElement('tr');
     irow.className = 'irow';
     irow.id = 'irow-' + slug;
-
-    var emptyTd = document.createElement('td');
-    emptyTd.style.cssText = 'padding:0;border-bottom:0.5px solid var(--color-border-secondary);background:var(--color-background-primary)';
-    irow.appendChild(emptyTd);
-
     var td = document.createElement('td');
-    td.setAttribute('colspan', '3');
-
-    var iexpand = document.createElement('div');
-    iexpand.className = 'iexpand';
-
-    var iwrap = document.createElement('div');
-    iwrap.className = 'iimg-wrap';
-
-    // Placeholder
-    var iph = document.createElement('div');
-    iph.className = 'iph';
-    iph.id = 'ph-' + slug;
-    iph.innerHTML = '<i class="ti ti-photo"></i><span class="iph-fn">images/' + slug + '.png</span><span class="iph-hint">3-panel LOD comparison · landscape · 1350&times;600px min</span>';
-
-    // Image
-    var img = document.createElement('img');
-    img.className = 'ireal';
-    img.src = 'images/' + slug + '.png';
-    img.alt = (labels[slug] || slug) + ' — LOD 200 / 250 / 300 comparison';
-    img.style.display = 'none';
-    img.addEventListener('load', function() {
-      iph.style.display = 'none';
-      img.style.display = 'block';
-    });
-    img.addEventListener('error', function() {
-      img.style.display = 'none';
-    });
-
-    var icap = document.createElement('p');
-    icap.className = 'icap';
-    icap.textContent = (labels[slug] || slug) + ' — LOD 200 · LOD 250 · LOD 300';
-
-    iwrap.appendChild(iph);
-    iwrap.appendChild(img);
-    iexpand.appendChild(iwrap);
-    iexpand.appendChild(icap);
-    td.appendChild(iexpand);
+    td.setAttribute('colspan', '4');
+    var box = document.createElement('div');
+    box.className = 'iexpand';
+    box.innerHTML = '<div class="iload">Loading comparison…</div>';
+    td.appendChild(box);
     irow.appendChild(td);
-
+    irow.dataset.name = name;
     erow.insertAdjacentElement('afterend', irow);
   });
-});
+})();
+
+// Comparison images load the first time a row is opened, not with the page
+function loadImage(irow, slug) {
+  if (irow.dataset.loaded) return;
+  irow.dataset.loaded = '1';
+  var box = irow.querySelector('.iexpand');
+  var src = 'images/' + slug + '.' + IMG_EXT;
+  var img = new Image();
+  img.className = 'ireal';
+  img.alt = irow.dataset.name + ': LOD 200, LOD 250 and LOD 300 compared';
+  img.onload = function() {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'iimg-btn';
+    btn.setAttribute('aria-label', 'View the ' + irow.dataset.name + ' comparison full size');
+    btn.appendChild(img);
+    btn.addEventListener('click', function() { openViewer(src, img.alt); });
+    box.innerHTML = '';
+    box.appendChild(btn);
+    var note = document.createElement('p');
+    note.className = 'inote';
+    note.textContent = 'Select the image to view it full size.';
+    box.appendChild(note);
+  };
+  img.onerror = function() { box.innerHTML = '<div class="iload">A comparison image for this element is not available yet.</div>'; };
+  img.src = src;
+}
 
 function tog(slug) {
   var irow = document.getElementById('irow-' + slug);
-  var carets = document.querySelectorAll('.caret');
-  var isOpen = irow.classList.contains('open');
+  var cell = document.querySelector('[data-slug="' + slug + '"]');
+  var wasOpen = irow.classList.contains('open');
 
-  // Close all
   document.querySelectorAll('.irow.open').forEach(function(r) { r.classList.remove('open'); });
-  carets.forEach(function(c) { c.classList.remove('open'); });
+  document.querySelectorAll('.caret.open').forEach(function(c) { c.classList.remove('open'); });
+  document.querySelectorAll('[data-slug][aria-expanded="true"]').forEach(function(c) { c.setAttribute('aria-expanded', 'false'); });
 
-  // Open this one if it was closed
-  if (!isOpen) {
+  if (!wasOpen) {
+    loadImage(irow, slug);
     irow.classList.add('open');
-    // Find and open matching caret
-    var cell = document.querySelector('[data-slug="' + slug + '"]');
-    if (cell) cell.querySelector('.caret').classList.add('open');
-    setTimeout(function() {
-      irow.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 80);
+    cell.querySelector('.caret').classList.add('open');
+    cell.setAttribute('aria-expanded', 'true');
   }
 }
 
-// Lightbox
-function lbxOpen(i) {
-  lbxSnap(i * 100);
-  document.getElementById('lbx').classList.add('open');
-  document.body.style.overflow = 'hidden';
+function openViewer(src, alt) {
+  var v = document.getElementById('viewer'), img = document.getElementById('viewer-img');
+  img.src = src; img.alt = alt;
+  if (v.showModal) v.showModal(); else v.setAttribute('open', '');
 }
-function lbxClose() {
-  document.getElementById('lbx').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function lbxBgClick(e) { if (e.target === document.getElementById('lbx')) lbxClose(); }
-function lbxSnap(v) {
-  document.getElementById('lbx-slider').value = v;
-  lbxUpdate();
-}
-function lbxUpdate() {
-  var v = parseInt(document.getElementById('lbx-slider').value);
-  var o200 = v <= 100 ? (100 - v) / 100 : 0;
-  var o250 = v <= 100 ? v / 100 : (200 - v) / 100;
-  var o300 = v <= 100 ? 0 : (v - 100) / 100;
-  document.getElementById('lbx-c200').style.opacity = o200;
-  document.getElementById('lbx-c250').style.opacity = o250;
-  document.getElementById('lbx-c300').style.opacity = o300;
-  var active = v < 50 ? 0 : v <= 150 ? 1 : 2;
-  document.querySelectorAll('.lbx-stops span').forEach(function(s, i) {
-    s.classList.toggle('active', i === active);
+
+// Category shortcuts, built from whatever category rows the table holds
+var jump = document.getElementById('jump');
+document.querySelectorAll('#tbl tr.cath').forEach(function(row) {
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.textContent = row.textContent.trim();
+  b.addEventListener('click', function() {
+    // Land the category just below whatever is stuck to the top of the screen
+    var offset = document.querySelector('.bar').offsetHeight + 8;
+    var th = document.querySelector('#tbl th');
+    var tools = document.querySelector('.tools');
+    if (th && th.offsetParent && getComputedStyle(th).position === 'sticky') offset += th.offsetHeight;
+    if (getComputedStyle(tools).position === 'sticky') offset += tools.offsetHeight;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: row.getBoundingClientRect().top + window.scrollY - offset, behavior: reduce ? 'auto' : 'smooth' });
   });
-}
-document.getElementById('lbx-slider').addEventListener('input', lbxUpdate);
-document.getElementById('lbx-slider').addEventListener('change', function() {
-  var v = parseInt(this.value);
-  var nearest = [0, 100, 200].reduce(function(a, b) {
-    return Math.abs(b - v) < Math.abs(a - v) ? b : a;
-  });
-  lbxSnap(nearest);
-});
-document.addEventListener('keydown', function(e) {
-  if (!document.getElementById('lbx').classList.contains('open')) return;
-  var v = parseInt(document.getElementById('lbx-slider').value);
-  if (e.key === 'Escape')     { lbxClose(); return; }
-  if (e.key === 'ArrowLeft')  lbxSnap(v <= 100 ? 0 : 100);
-  if (e.key === 'ArrowRight') lbxSnap(v < 100 ? 100 : 200);
+  row._jump = b;
+  jump.appendChild(b);
 });
 
+// Highlight one tier
 function sf(tier, btn) {
-  document.querySelectorAll('.fbtn').forEach(function(b) { b.className = 'fbtn'; });
-  btn.classList.add('fa-' + tier);
+  document.querySelectorAll('.fbtn').forEach(function(b) { b.setAttribute('aria-pressed', 'false'); });
+  btn.setAttribute('aria-pressed', 'true');
   document.getElementById('tbl').className = 'stbl' + (tier !== 'all' ? ' ft' + tier : '');
 }
+
+// Find an element
+var find = document.getElementById('find');
+function applyFind() {
+  var q = find.value.trim().toLowerCase(), shown = 0;
+  var sectionRow = null, sectionCount = 0;
+  function closeSection() { if (sectionRow) { sectionRow.style.display = sectionCount ? '' : 'none'; if (sectionRow._jump) sectionRow._jump.style.display = sectionCount ? '' : 'none'; } }
+  document.querySelectorAll('#tbl tbody tr').forEach(function(tr) {
+    if (tr.classList.contains('cath')) { closeSection(); sectionRow = tr; sectionCount = 0; return; }
+    if (tr.classList.contains('erow')) {
+      var hit = !q || tr.textContent.toLowerCase().indexOf(q) !== -1;
+      tr.style.display = hit ? '' : 'none';
+      var irow = tr.nextElementSibling;
+      if (!hit && irow && irow.classList.contains('irow')) {
+        irow.classList.remove('open');
+        tr.querySelector('.caret').classList.remove('open');
+        tr.querySelector('[data-slug]').setAttribute('aria-expanded', 'false');
+      }
+      if (hit) { shown++; sectionCount++; }
+    }
+  });
+  closeSection();
+  document.getElementById('tbl').style.display = shown ? '' : 'none';
+  document.getElementById('empty').style.display = shown ? 'none' : 'block';
+}
+function clearFind() { find.value = ''; applyFind(); find.focus(); }
+find.addEventListener('input', applyFind);
 </script>
 </body>
 </html>
