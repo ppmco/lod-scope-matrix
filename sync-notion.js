@@ -36,7 +36,8 @@ const SLUGS = {
   'Built-in Cabinetry / Counters':                                       'casework',
   'Major Appliances':                                                    'appliances',
   'Plumbing Fixtures':                                                   'plumbing',
-  'Attached wall elements (shelves, mirrors)':                           'wall-elements',
+  'Attached Wall Elements (shelves, mirrors)':                           'wall-elements',
+  'Attached wall elements (shelves, mirrors)':                           'wall-elements', // old title, kept as alias
   'Building Facade':                                                     'facade',
   'Attached Decks / Balconies':                                          'deck',
   'Columns / Posts':                                                     'columns',
@@ -52,10 +53,13 @@ const SLUGS = {
   'Utility Panels & Meters':                                             'utility-panels',
   'Outlets / Switches / Jacks':                                          'outlets',
   'Controls (HVAC, security)':                                           'controls',
-  'Ceiling Fixtures (lights, vents, sprinklers, etc)':                   'fixtures',
+  'Ceiling Fixtures (lights, vents, sprinklers, etc.)':                  'fixtures',
+  'Ceiling Fixtures (lights, vents, sprinklers, etc)':                   'fixtures', // old title, kept as alias
   'Piping / Ducting':                                                    'piping',
-  'Building/Structure footprint':                                        'footprint',
-  'Major Hardscape/Parking':                                             'hardscape',
+  'Building / Structure Footprint':                                      'footprint',
+  'Building/Structure footprint':                                        'footprint', // old title, kept as alias
+  'Major Hardscape / Parking':                                           'hardscape',
+  'Major Hardscape/Parking':                                             'hardscape', // old title, kept as alias
   'Utilities (gas/elec/water meters)':                                   'utilities',
   'Utilities (Gas/Elec/Water Meters)':                                   'utilities', // alias until Notion title is lowercased
 };
