@@ -64,6 +64,14 @@ const SLUGS = {
   'Utilities (Gas/Elec/Water Meters)':                                   'utilities', // alias until Notion title is lowercased
 };
 
+// Fallback lookup: the name before any parenthetical, lowercased.
+// Editing the examples in parentheses in Notion ("Attached Wall Elements (shelves, mirrors)" →
+// "Attached Wall Elements (crown molding, baseboards, vents)") no longer drops the row.
+// Changing the name itself still needs a new SLUGS entry.
+const baseName = s => s.replace(/\s*\(.*$/, '').trim().toLowerCase();
+const SLUGS_BY_BASE = {};
+for (const [title, slug] of Object.entries(SLUGS)) SLUGS_BY_BASE[baseName(title)] = slug;
+
 // ─── Display section config ────────────────────────────────────────────────────
 // Controls section headers and row order in the HTML.
 // The Notion "PPM Plan Type" field is for plan drawing types (different purpose) — not used here.
@@ -137,7 +145,7 @@ async function main() {
     const planItem  = titleProp ? txt(titleProp) : '';
     if (!planItem) continue;
 
-    const slug = SLUGS[planItem];
+    const slug = SLUGS[planItem] ?? SLUGS_BY_BASE[baseName(planItem)];
     if (!slug) { unmapped.push(planItem); continue; }
 
     bySlug[slug] = {
